@@ -1,0 +1,68 @@
+import { CustomerInfo, engineerInfo } from './BEditScheduleDef';
+
+export const dummyCustomers: CustomerInfo[] = [
+  {
+    customerName: '홍길동',
+    customerContact: '010-1234-5678',
+    customerAddress: '서울시 강남구 테헤란로 123',
+    cleaningItem: '에어컨',
+    customerComments: '연아 2구',
+    cleaningType: '복합 청소',
+    itemQuantity: 2,
+    totalPrice: 150000,
+    appointmentDate: '2024-10-05',
+    appointmentTime: '14:00',
+    assignedEngineer: '이철수',
+  },
+  {
+    customerName: '김영희',
+    customerContact: '010-9876-5432',
+    customerAddress: '서울시 마포구 상암동 456',
+    cleaningItem: '보일러',
+    cleaningType: '복합 청소',
+    itemQuantity: 1,
+    totalPrice: 100000,
+    appointmentDate: '2024-10-06',
+    appointmentTime: '10:00',
+    assignedEngineer: '박지성',
+  },
+  {
+    customerName: '강여울',
+    customerContact: '010-1111-1111',
+    customerAddress: '서울시 마포구 상암동 456',
+    cleaningItem: '벽걸이',
+    cleaningType: '복합 청소',
+    itemQuantity: 1,
+    totalPrice: 100000,
+    appointmentDate: '2024-10-06',
+    appointmentTime: '10:00',
+    assignedEngineer: '이철수',
+  },
+];
+
+export const dummyEngineers: engineerInfo[] = [
+  {
+    engineerId: 1,
+    engineerName: '이철수',
+    engineerContact: '010-2345-6789',
+    engineerAddress: '서울시 종로구 종로1가',
+    engineerAbleItem: '벽걸이, 원웨이, 포웨이',
+    engineerSignificant: '없음',
+    engineerWorkDay: '월,화,수,금',
+    engineerClosedDay: '목',
+    engineerClosedDate: '2024-10-07',
+    engineerSalary: 4000000,
+  },
+  {
+    engineerId: 2,
+    engineerName: '박지성',
+    engineerContact: '010-3456-7890',
+    engineerAddress: '서울시 서초구 서초동',
+    engineerAbleItem: '보일러 점검, 보일러 설치',
+    engineerSignificant: '8년 경력',
+    engineerWorkDay: '목,토,일,',
+    engineerClosedDay: '일',
+    engineerClosedDate: '2024-10-05',
+    engineerSalary: 3800000,
+  },
+];
