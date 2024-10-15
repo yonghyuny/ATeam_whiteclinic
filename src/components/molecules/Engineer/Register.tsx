@@ -3,9 +3,9 @@
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import InfoForm from '@/components/molecules/Form/InfoForm';
-import TwoButtons from '@/components/molecules/Button/TwoButton';
 import { EngineerFormData, EngineerFormValues } from '@/constants/EnginnerFormData';
 import CenteredLayout from '@/styles/layout/CenterLayout';
+import TwoButtons from '../Button/ShaTwoButton';
 
 type RegisterProps = {
   onRegister?: () => void;
@@ -68,7 +68,7 @@ const Register = ({ onRegister }: RegisterProps) => {
     <CenteredLayout>
       <Box>
         <InfoForm titledformcontrolprops={EngineerFormData(formValues, handleFieldChange)} />
-        <TwoButtons
+        {/* <TwoButtons
           leftButton={{ text: '취소', color: 'default', size: 'large', onClick: resetFormValues }}
           rightButton={{
             text: '등록',
@@ -77,7 +77,17 @@ const Register = ({ onRegister }: RegisterProps) => {
             onClick: handleSubmit,
             disabled: !isFormValid(),
           }}
-        />
+        /> */}
+        <TwoButtons
+          leftButton={{ text: '취소', onClick: resetFormValues, size: 'lg', variant: 'secondary' }}
+          rightButton={{
+            text: '등록',
+            onClick: handleSubmit,
+            size: 'lg',
+            variant: 'default',
+            disabled: !isFormValid(),
+          }}
+        ></TwoButtons>
       </Box>
     </CenteredLayout>
   );
