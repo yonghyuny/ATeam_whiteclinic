@@ -1,7 +1,10 @@
 'use client';
 
+import ShaDateTimePicker from '@/components/molecules/ADateTimePicker/ShaDateTimePicker';
 import TwoButtons from '@/components/molecules/Button/TwoButton';
+import LabelCheckBox from '@/components/molecules/Engineer/LabelCheckBox';
 import Holiday from '@/components/molecules/Engineer/ShaHoliday';
+import ShaLabelCheckBox from '@/components/molecules/Engineer/ShaLabelCheckBox';
 
 import InfoForm from '@/components/molecules/Form/InfoForm';
 import { PaymentInfo } from '@/constants/PaymentInfo';
@@ -11,6 +14,7 @@ import { useState } from 'react';
 
 const Page = () => {
   const [selectedDays, setSelectedDays] = useState<string[]>([]);
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   return (
     <CenteredLayout>
@@ -22,7 +26,12 @@ const Page = () => {
         /> */}
         수정 페이지
       </Box>
-      <Holiday selectedDays={selectedDays} onDaysChange={setSelectedDays} />{' '}
+      <Holiday selectedDays={selectedDays} onDaysChange={setSelectedDays} />
+      <ShaLabelCheckBox
+        selectedItems={selectedItems}
+        onItemsChange={setSelectedItems}
+      ></ShaLabelCheckBox>
+      <ShaDateTimePicker></ShaDateTimePicker>
     </CenteredLayout>
   );
 };

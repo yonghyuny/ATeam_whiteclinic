@@ -1,26 +1,32 @@
-import AButton, { AButtonProps } from '@/components/atom/Button/ShaButton';
-import { Box } from '@mui/material';
+'use client';
 
-type TwoButtonsProps = {
-  leftButton: AButtonProps;
-  rightButton: AButtonProps;
+import React from 'react';
+import ShaButton, { ShaButtonProps } from '@/components/atom/Button/ShaButton';
+
+type ShaTwoButtonsProps = {
+  leftButton: Omit<ShaButtonProps, 'variant'> & {
+    variant?: 'outline' | 'secondary';
+  };
+  rightButton: Omit<ShaButtonProps, 'variant'> & {
+    variant?: 'default';
+  };
 };
 
-const TwoButtons = ({ leftButton, rightButton }: TwoButtonsProps) => {
+const ShaTwoButton = ({ leftButton, rightButton }: ShaTwoButtonsProps) => {
   return (
-    <Box
-      sx={{
-        width: '100%',
-        flexGrow: 1,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <AButton {...leftButton} />
-      <AButton {...rightButton} />
-    </Box>
+    <div className="flex items-center justify-center gap-4">
+      <ShaButton
+        {...leftButton}
+        variant={leftButton.variant || 'outline'}
+        size={leftButton.size || 'default'}
+      />
+      <ShaButton
+        {...rightButton}
+        variant={rightButton.variant || 'default'}
+        size={rightButton.size || 'default'}
+      />
+    </div>
   );
 };
 
-export default TwoButtons;
+export default ShaTwoButton;

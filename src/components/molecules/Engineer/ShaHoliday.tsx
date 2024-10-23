@@ -6,12 +6,12 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Days } from '@/constants/Days';
 import ShadcnDropdown from '@/components/atom/DropdownBox/ShaDropDown';
 
-export type HolidayProps = {
+export type ShaHolidayProps = {
   selectedDays: string[];
   onDaysChange: (newDays: string[]) => void;
 };
 
-const Holiday: React.FC<HolidayProps> = ({ selectedDays, onDaysChange }) => {
+const ShaHoliday: React.FC<ShaHolidayProps> = ({ selectedDays, onDaysChange }) => {
   const [selectedDay, setSelectedDay] = useState<string>('');
 
   const DayOptions = Days.map((day) => ({ text: day, value: day }));
@@ -65,4 +65,4 @@ const Holiday: React.FC<HolidayProps> = ({ selectedDays, onDaysChange }) => {
   );
 };
 
-export default Holiday;
+export default ShaHoliday;

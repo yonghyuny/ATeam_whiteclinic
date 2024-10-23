@@ -1,6 +1,7 @@
 'use client';
 
 import Register from '@/components/molecules/Engineer/Register';
+import ShaRegister from '@/components/molecules/Engineer/ShaRegister';
 import { Box, Container } from '@mui/material';
 import React from 'react';
 
@@ -15,7 +16,8 @@ export default function Page() {
         width: '100%',
       }}
     >
-      <Register />
+      {/* <Register /> */}
+      <ShaRegister></ShaRegister>
     </Box>
   );
 }

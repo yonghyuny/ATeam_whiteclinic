@@ -1,4 +1,4 @@
-import CustomerRegister from '@/components/organism/Customer/CustomerRegister';
+import CustomerRegister from '@/components/organism/Customer/ShaCustomer';
 import CenteredLayout from '@/styles/layout/CenterLayout';
 
 const Page = () => {

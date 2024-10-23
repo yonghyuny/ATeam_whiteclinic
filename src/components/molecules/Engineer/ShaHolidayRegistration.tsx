@@ -7,12 +7,12 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import ShadcnDatePicker from '@/components/atom/Calendar/ShaDatePicker';
 
-export type HolidayRegistrationProps = {
+export type ShaHolidayRegistrationProps = {
   registeredHolidays: Date[];
   onHolidaysChange: (newHolidays: Date[]) => void;
 };
 
-const HolidayRegistration: React.FC<HolidayRegistrationProps> = ({
+const ShaHolidayRegistration: React.FC<ShaHolidayRegistrationProps> = ({
   registeredHolidays,
   onHolidaysChange,
 }) => {
@@ -65,4 +65,4 @@ const HolidayRegistration: React.FC<HolidayRegistrationProps> = ({
   );
 };
 
-export default HolidayRegistration;
+export default ShaHolidayRegistration;

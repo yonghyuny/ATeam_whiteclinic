@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 
-export type AButtonProps = {
+export type ShaButtonProps = {
   variant?: 'default' | 'secondary' | 'outline';
   text:
     | '등록중지'
@@ -19,7 +19,7 @@ export type AButtonProps = {
   disabled?: boolean;
 };
 
-const AButton = ({ variant, text, onClick, size, disabled = false }: AButtonProps) => {
+const ShaButton = ({ variant, text, onClick, size, disabled = false }: ShaButtonProps) => {
   return (
     <Button variant={variant} onClick={onClick} size={size} disabled={disabled}>
       {text}
@@ -27,4 +27,4 @@ const AButton = ({ variant, text, onClick, size, disabled = false }: AButtonProp
   );
 };
 
-export default AButton;
+export default ShaButton;

@@ -17,9 +17,6 @@ import { Payment } from '@/constants/Payment';
 import { Percentage } from '@/constants/Percentage';
 import { productCategories } from '@/constants/productCategory';
 
-// 기존 import 문에서 사용하지 않는 것들은 제거했습니다.
-// selectDate, Months 등이 필요하다면 다시 추가해주세요.
-
 type AllowedObjects =
   | (typeof Days)[number]
   | (typeof Document)[number]
@@ -36,7 +33,7 @@ type OptionsProps = {
   text: AllowedObjects;
 };
 
-export type ShadcnDropdownProps = {
+export type ShaDropdownProps = {
   label?: string;
   value?: string;
   onChange?: (value: string) => void;
@@ -45,7 +42,7 @@ export type ShadcnDropdownProps = {
   color?: string;
 };
 
-const ShadcnDropdown: React.FC<ShadcnDropdownProps> = ({
+const ShaDropdown: React.FC<ShaDropdownProps> = ({
   label,
   value,
   onChange,
@@ -78,4 +75,4 @@ const ShadcnDropdown: React.FC<ShadcnDropdownProps> = ({
   );
 };
 
-export default ShadcnDropdown;
+export default ShaDropdown;
