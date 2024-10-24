@@ -20,11 +20,6 @@ export const colors = {
     hover: '#1dc4e9', // 링크 호버 시 텍스트 색상
     title: '#E8E3D2', // 메뉴 타이틀 텍스트 색상
     default: '#000000', // 검은색
-    // test용
-    first: '#C0B298',
-    second: '#E8C064',
-    third: '#FF9933',
-    fourth: '#FFA07A',
   },
 
   // 경계선 색상 (Border colors)

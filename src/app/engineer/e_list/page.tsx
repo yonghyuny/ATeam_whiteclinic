@@ -1,122 +1,146 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { WorkerInfo, WorkerProps } from '@/constants/Workers';
-import CenteredLayout from '@/styles/layout/CenterLayout';
-import AButton from '@/components/atom/Button/AButton';
-import ADataGrid from '@/components/molecules/datagrid/ADataGrid';
-import { getFooterData } from '@/constants/yh/WorkerFooterData';
+
 import AFooter from '@/components/molecules/datagrid/AFooter';
-import { workerColumns } from '@/constants/yh/ColumnData';
-import CardFilter from '@/components/organism/yh/CardFilter';
-import { YStyle } from '@/styles/yh';
-import { sizes } from '@/styles/sizes';
+import { getFooterData } from '@/constants/yh/WorkerFooterData';
+import WorkerDrawer from '@/components/yong/WorkerDrawer';
+import ACalendar from '@/components/atom/Calendar/ACalendar';
+
+const StyledCalendarContainer = styled(Box)({
+  '& .rbc-calendar': {
+    maxWidth: '1400px !important',
+    margin: '0 auto',
+  },
+  '& .rbc-event': {
+    backgroundColor: '#3174ad !important',
+    padding: '4px !important',
+    fontSize: '0.9em !important',
+  },
+  '& .rbc-event-content': {
+    textAlign: 'center',
+  },
+  '& .rbc-row-segment': {
+    padding: '2px 4px !important',
+  },
+  '& .rbc-toolbar': {
+    marginBottom: '20px',
+  },
+  '& .rbc-toolbar button': {
+    color: '#333',
+  },
+  '& .rbc-active': {
+    backgroundColor: '#3174ad !important',
+    color: 'white !important',
+  },
+  '& .rbc-today': {
+    backgroundColor: '#f0f7ff',
+  },
+});
 
 const Page = () => {
   const [selectedWorker, setSelectedWorker] = useState<WorkerProps | null>(null);
-  const [rows, setRows] = useState<any[]>([]);
-  const [filter, setFilter] = useState('');
-
-  const handleCardClick = (worker: WorkerProps) => {
-    setSelectedWorker(worker);
-  };
-
-  const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter(event.target.value);
-  };
+  const [open, setOpen] = useState(false);
+  const [events, setEvents] = useState<any[]>([]);
 
   useEffect(() => {
-    if (selectedWorker && selectedWorker.datePay) {
-      const newRows = selectedWorker.datePay.map((dp, index) => ({
-        id: index,
-        date: dp.date,
-        pay: parseInt(dp.pay),
-      }));
-      setRows(newRows);
+    if (selectedWorker) {
+      const newEvents = selectedWorker.datePay.map((dp) => {
+        const dateStr = dp.date;
+        const month = parseInt(dateStr.match(/(\d+)월/)![1]) - 1;
+        const day = parseInt(dateStr.match(/(\d+)일/)![1]);
+        const date = new Date(2024, month, day);
+
+        const pay = parseInt(dp.pay.replace('원', ''));
+
+        return {
+          title: `${pay.toLocaleString()}원`,
+          start: date,
+          end: date,
+          allDay: true,
+          pay: pay,
+        };
+      });
+      setEvents(newEvents);
     }
   }, [selectedWorker]);
 
-  const filteredWorkers = Object.entries(WorkerInfo).filter(
-    ([_, worker]) =>
-      worker.name.toLowerCase().includes(filter.toLowerCase()) || worker.available.includes(filter)
-  );
-
-  const submit = () => {
-    console.log('제출');
+  const handleWorkerSelect = (worker: WorkerProps) => {
+    setSelectedWorker(worker);
+    setOpen(false);
   };
 
-  const workerDataProps = {
-    rows,
-    columns: workerColumns,
-    title: `${selectedWorker?.name}의 정보`,
-    height: 'auto',
-    width: '100%',
+  const handleEventAdd = (event: any) => {
+    console.log('New event:', event);
   };
 
-  const cardFilterProps = {
-    data: filteredWorkers,
-    filter: filter,
-    onFilterChange: handleFilterChange,
-    onItemClick: handleCardClick,
+  const handleEventSelect = (event: any) => {
+    console.log('Selected event:', event);
   };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-        width: '100%',
-        overflow: 'hidden',
-      }}
-    >
-      <Box
-        sx={{
-          display: 'flex',
-          flexGrow: 1,
-          overflow: 'hidden',
-        }}
-      >
+    <Box sx={{ p: 3, height: '100vh', width: '100%' }}>
+      <Box sx={{ mb: 3 }}>
+        <WorkerDrawer
+          WorkerInfo={WorkerInfo}
+          onWorkerSelect={handleWorkerSelect}
+          open={open}
+          onOpenChange={setOpen}
+        />
+      </Box>
+
+      {selectedWorker && (
         <Box
           sx={{
-            width: '400px',
-            height: '100%',
-            overflowY: 'auto',
-            borderRight: '1px solid #e0e0e0',
+            width: '100%',
+            height: '100vh',
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
+            gap: '20px', // 달력과 Footer 사이 간격
           }}
         >
-          <CardFilter {...cardFilterProps} />
+          <Typography
+            variant="h5"
+            sx={{
+              mb: 2,
+              fontWeight: 'bold',
+              color: '#333',
+            }}
+          >
+            {selectedWorker.name}님의 근무 일정
+          </Typography>
+
+          {/* Calendar Container */}
+          <StyledCalendarContainer
+            sx={{
+              flexGrow: 1,
+              minHeight: '600px', // 달력 높이 조정
+              mb: 3,
+            }}
+          >
+            <ACalendar
+              events={events}
+              onEventAdd={handleEventAdd}
+              onEventSelect={handleEventSelect}
+            />
+          </StyledCalendarContainer>
+
+          {/* Footer Container */}
+          <Box
+            sx={{
+              width: '100%',
+              maxWidth: '1400px', // 달력 너비와 맞춤
+              margin: '0 auto',
+              mt: 'auto', // 하단에 붙임
+            }}
+          >
+            <AFooter data={getFooterData(selectedWorker)} />
+          </Box>
         </Box>
-        <Box
-          sx={{
-            flexGrow: 1,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-            overflowY: 'auto',
-            padding: '20px',
-          }}
-        >
-          {selectedWorker && (
-            <Box
-              sx={{
-                width: '100%',
-                maxWidth: '800px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '20px',
-              }}
-            >
-              <ADataGrid {...workerDataProps} />
-              <AFooter data={getFooterData(selectedWorker)} />
-            </Box>
-          )}
-        </Box>
-      </Box>
+      )}
     </Box>
   );
 };
