@@ -2,8 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import { Typography } from '@mui/material';
+
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import SideNav from './ui/SideNav';
@@ -45,7 +44,6 @@ const RootLayout = ({
               p: 0,
             }}
           >
-            <Toolbar />
             <Box
               sx={{
                 flexGrow: 1,
