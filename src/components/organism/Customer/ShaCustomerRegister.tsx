@@ -66,6 +66,7 @@ const ShaCustomerInfo = ({ onRegister }: CustomerInfoProps) => {
       'address',
       'document',
       'payment',
+      'published',
     ];
     return requiredFields.every((field) => formValues[field] !== '' && formValues[field] !== null);
   };

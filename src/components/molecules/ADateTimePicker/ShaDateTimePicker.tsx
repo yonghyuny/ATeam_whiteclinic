@@ -31,6 +31,10 @@ const ShaDateTimePicker = ({
   onChange,
   className,
 }: ShaDateTimePickerProps) => {
+  // 업무 시간대 설정 (9시부터 18시까지)
+  const hours = Array.from({ length: 10 }, (_, i) => (i + 9).toString().padStart(2, '0'));
+  const minutes = ['00', '30'];
+
   const handleDateSelect = (date: Date | undefined) => {
     if (!date) return;
 
@@ -38,7 +42,7 @@ const ShaDateTimePicker = ({
       date.getFullYear(),
       date.getMonth(),
       date.getDate(),
-      value?.getHours() || 0,
+      value?.getHours() || 9, // 기본값을 9시로 설정
       value?.getMinutes() || 0
     );
 
@@ -48,12 +52,17 @@ const ShaDateTimePicker = ({
   const handleTimeChange = (type: 'hour' | 'minute', timeValue: string) => {
     if (!value) {
       const now = new Date();
+      now.setHours(9, 0, 0, 0); // 기본값을 9시로 설정
       value = now;
     }
 
     const newDateTime = new Date(value);
     if (type === 'hour') {
       newDateTime.setHours(parseInt(timeValue));
+      // 시간이 변경될 때 분이 설정되어 있지 않다면 00분으로 설정
+      if (isNaN(newDateTime.getMinutes())) {
+        newDateTime.setMinutes(0);
+      }
     } else {
       newDateTime.setMinutes(parseInt(timeValue));
     }
@@ -61,9 +70,9 @@ const ShaDateTimePicker = ({
     onChange?.(newDateTime);
   };
 
-  // 시간 선택 옵션 생성
-  const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
-  const minutes = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'));
+  const formattedDate = value ? format(value, 'PPP', { locale: ko }) : dateLabel;
+  const formattedHour = value?.getHours().toString().padStart(2, '0');
+  const formattedMinute = value?.getMinutes().toString().padStart(2, '0');
 
   return (
     <div className={cn('flex gap-2', className)}>
@@ -78,7 +87,7 @@ const ShaDateTimePicker = ({
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {value ? format(value, 'PPP', { locale: ko }) : <span>{dateLabel}</span>}
+              {formattedDate}
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
@@ -88,16 +97,19 @@ const ShaDateTimePicker = ({
               onSelect={handleDateSelect}
               locale={ko}
               initialFocus
+              disabled={(date) => {
+                // 오늘 이전 날짜 선택 불가
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                return date < today;
+              }}
             />
           </PopoverContent>
         </Popover>
       </div>
 
       <div className="flex gap-2">
-        <Select
-          value={value?.getHours().toString().padStart(2, '0')}
-          onValueChange={(val) => handleTimeChange('hour', val)}
-        >
+        <Select value={formattedHour} onValueChange={(val) => handleTimeChange('hour', val)}>
           <SelectTrigger className="w-[100px]">
             <Clock className="mr-2 h-4 w-4" />
             <SelectValue placeholder="시" />
@@ -111,10 +123,7 @@ const ShaDateTimePicker = ({
           </SelectContent>
         </Select>
 
-        <Select
-          value={value?.getMinutes().toString().padStart(2, '0')}
-          onValueChange={(val) => handleTimeChange('minute', val)}
-        >
+        <Select value={formattedMinute} onValueChange={(val) => handleTimeChange('minute', val)}>
           <SelectTrigger className="w-[100px]">
             <SelectValue placeholder="분" />
           </SelectTrigger>

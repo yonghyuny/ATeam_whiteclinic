@@ -39,7 +39,6 @@ const ShaCheckboxDropdownSelector = ({
       }))
     : [];
 
-  // 추가 입력이 필요한 옵션인지 확인
   const needsCustomInput = selectedDropdownValue === '스탠드' || selectedDropdownValue === '투인원';
 
   return (
@@ -49,29 +48,30 @@ const ShaCheckboxDropdownSelector = ({
         value={selectedCategory}
         onChange={handleCheckboxChange}
       />
+      <div className="flex flex-col gap-2">
+        {selectedCategory && (
+          <ShaDropdown
+            key={selectedCategory}
+            label={label}
+            value={selectedDropdownValue}
+            options={dropdownOptions}
+            width="large"
+            onChange={handleDropdownChange}
+          />
+        )}
 
-      {selectedCategory && (
-        <ShaDropdown
-          key={selectedCategory}
-          label={label}
-          value={selectedDropdownValue}
-          options={dropdownOptions}
-          width="large"
-          onChange={handleDropdownChange}
-        />
-      )}
-
-      {needsCustomInput && (
-        <ShaTextarea
-          key={selectedDropdownValue}
-          placeholder="세부 사항 입력"
-          value={customInputValue}
-          onChange={onProductChange}
-          size="medium"
-          rows={2}
-          className="min-h-[60px]"
-        />
-      )}
+        {needsCustomInput && (
+          <ShaTextarea
+            key={selectedDropdownValue}
+            placeholder="세부 사항 입력"
+            value={customInputValue}
+            onChange={onProductChange}
+            size="medium"
+            rows={2}
+            className="min-h-[60px]"
+          />
+        )}
+      </div>
     </div>
   );
 };

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
-import { Pencil } from 'lucide-react';
+import { Pencil, ChevronUp, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export type ShaNumericInputProps = {
@@ -20,6 +20,9 @@ export type ShaNumericInputProps = {
   required?: boolean;
   error?: string;
   showError?: boolean;
+  unit?: '원' | '대';
+  showSpinner?: boolean; // 새로 추가된 prop
+  step?: number; // 새로 추가된 prop - 증감 단위
 };
 
 const formatCurrency = (value: string) => {
@@ -45,6 +48,9 @@ const ShaNumericInput = ({
   required = false,
   error,
   showError = false,
+  unit = '원',
+  showSpinner = false,
+  step = 1,
 }: ShaNumericInputProps) => {
   const [isDisabled, setIsDisabled] = useState(initialDisabled);
   const [displayValue, setDisplayValue] = useState(formatCurrency(value));
@@ -55,16 +61,12 @@ const ShaNumericInput = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let newValue = unformatCurrency(e.target.value);
-
-    // 숫자가 아닌 문자 제거
     newValue = newValue.replace(/[^\d]/g, '');
 
-    // 앞의 0 제거
     if (newValue.length > 1 && newValue.startsWith('0')) {
       newValue = newValue.replace(/^0+/, '');
     }
 
-    // 빈 값 처리
     if (newValue === '') {
       onChange?.('0');
       return;
@@ -78,6 +80,24 @@ const ShaNumericInput = ({
     ) {
       onChange?.(numericValue.toString());
       setDisplayValue(formatCurrency(newValue));
+    }
+  };
+
+  const handleIncrement = () => {
+    const currentValue = Number(unformatCurrency(displayValue)) || 0;
+    const newValue = currentValue + step;
+    if (max === undefined || newValue <= max) {
+      onChange?.(newValue.toString());
+      setDisplayValue(formatCurrency(newValue.toString()));
+    }
+  };
+
+  const handleDecrement = () => {
+    const currentValue = Number(unformatCurrency(displayValue)) || 0;
+    const newValue = currentValue - step;
+    if (newValue >= min) {
+      onChange?.(newValue.toString());
+      setDisplayValue(formatCurrency(newValue.toString()));
     }
   };
 
@@ -112,9 +132,37 @@ const ShaNumericInput = ({
             )}
           />
           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-            원
+            {unit}
           </span>
         </div>
+
+        {showSpinner && (
+          <div className="flex flex-col gap-0">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              className="h-5 w-7 rounded-b-none border-b-0"
+              onClick={handleIncrement}
+              disabled={
+                isDisabled || (max !== undefined && Number(unformatCurrency(displayValue)) >= max)
+              }
+            >
+              <ChevronUp className="h-3 w-3" />
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              size="icon"
+              className="h-5 w-7 rounded-t-none"
+              onClick={handleDecrement}
+              disabled={isDisabled || Number(unformatCurrency(displayValue)) <= min}
+            >
+              <ChevronDown className="h-3 w-3" />
+            </Button>
+          </div>
+        )}
+
         <Button
           type="button"
           variant="outline"

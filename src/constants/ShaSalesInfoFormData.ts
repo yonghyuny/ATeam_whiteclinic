@@ -67,8 +67,16 @@ export const ShaSalesInfoFormData = ({
             prevprops: {
               onecheckboxprops: {
                 checkboxes: {
-                  airConditioner: { text: productCategories.airConditioner.product },
-                  washingMachine: { text: productCategories.washingMachine.product },
+                  airConditioner: {
+                    textprops: {
+                      text: productCategories.airConditioner.product,
+                    },
+                  },
+                  washingMachine: {
+                    textprops: {
+                      text: productCategories.washingMachine.product,
+                    },
+                  },
                 },
                 value: selectedCategory,
                 onChange: onCategoryChange,
@@ -97,6 +105,11 @@ export const ShaSalesInfoFormData = ({
               value: itemCount.toString(),
               onChange: onItemCountChange,
               size: 'medium',
+              unit: '대',
+              showSpinner: true, // 스피너 표시 활성화
+              min: 0, // 최소값 설정
+              max: 999, // 최대값 설정 (필요에 따라 조절)
+              step: 1, // 증감 단위 설정
             } as ShaNumericInputProps,
           },
         ],
