@@ -38,7 +38,7 @@ const ACard = ({ name, tel, address, onClick }: ACardProps) => {
         <Box sx={{ display: 'flex', gap: 1, ml: '10px' }}>
           <PersonIcon fontSize="small" sx={{ color: colors.text.primary }} />
           <AText text={'이름: '} />
-          <AText text={name} color="fourth" />
+          <AText text={name} />
         </Box>
 
         <Box sx={{ display: 'flex', gap: 1, ml: '10px' }}>
