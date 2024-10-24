@@ -37,19 +37,19 @@ const ACard = ({ name, tel, address, onClick }: ACardProps) => {
       >
         <Box sx={{ display: 'flex', gap: 1, ml: '10px' }}>
           <PersonIcon fontSize="small" sx={{ color: colors.text.primary }} />
-          <AText text={'이름: '} color="third" />
+          <AText text={'이름: '} />
           <AText text={name} color="fourth" />
         </Box>
 
         <Box sx={{ display: 'flex', gap: 1, ml: '10px' }}>
           <PhoneAndroidIcon fontSize="small" sx={{ color: colors.text.primary }} />
-          <AText text={'번호: '} color="second" />
+          <AText text={'번호: '} />
           <AText text={tel} />
         </Box>
 
         <Box sx={{ display: 'flex', gap: 1, ml: '10px' }}>
           <HomeIcon fontSize="small" sx={{ color: colors.text.primary }} />
-          <AText text={'주소: '} color="first" />
+          <AText text={'주소: '} />
           <AText text={address} />
         </Box>
       </CardContent>

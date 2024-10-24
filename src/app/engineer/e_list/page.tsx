@@ -3,15 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
 import { WorkerInfo, WorkerProps } from '@/constants/Workers';
-import CenteredLayout from '@/styles/layout/CenterLayout';
-import AButton from '@/components/atom/Button/AButton';
+
 import ADataGrid from '@/components/molecules/datagrid/ADataGrid';
 import { getFooterData } from '@/constants/yh/WorkerFooterData';
 import AFooter from '@/components/molecules/datagrid/AFooter';
 import { workerColumns } from '@/constants/yh/ColumnData';
 import CardFilter from '@/components/organism/yh/CardFilter';
-import { YStyle } from '@/styles/yh';
-import { sizes } from '@/styles/sizes';
+
 
 const Page = () => {
   const [selectedWorker, setSelectedWorker] = useState<WorkerProps | null>(null);
