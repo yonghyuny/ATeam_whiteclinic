@@ -1,59 +1,51 @@
-import { Box, CardContent } from '@mui/material';
-import AText from '../../atom/Text/AText';
-import { colors } from '@/styles/colors';
-import PersonIcon from '@mui/icons-material/Person';
-import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
-import HomeIcon from '@mui/icons-material/Home';
+'use client';
 
-type ACardProps = {
+import * as React from 'react';
+import { User, Phone, Home } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { colors } from '@/styles/colors';
+
+interface ACardProps {
   name: string;
   tel: string;
   address: string;
   available?: string;
   remark?: string;
   onClick: () => void;
-};
+}
 
-const ACard = ({ name, tel, address, onClick }: ACardProps) => {
+const ACard: React.FC<ACardProps> = ({ name, tel, address, onClick }) => {
   return (
-    <>
-      <CardContent
-        onClick={onClick}
-        sx={{
-          // border: '1px solid black',
-          width: '300px',
-          height: 'auto',
-          backgroundColor: 'white',
-          borderRadius: '10px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignContent: 'center',
-          gap: 1,
-          '&:hover': {
-            cursor: 'pointer',
-            backgroundColor: colors.test.third,
-          },
-        }}
-      >
-        <Box sx={{ display: 'flex', gap: 1, ml: '10px' }}>
-          <PersonIcon fontSize="small" sx={{ color: colors.text.primary }} />
-          <AText text={'이름: '} />
-          <AText text={name} />
-        </Box>
+    <Card
+      onClick={onClick}
+      className="w-[300px] bg-white rounded-lg hover:bg-[var(--hover-bg)] hover:text-[var(--hover-color)] hover:cursor-pointer transition-colors"
+      style={
+        {
+          '--hover-bg': colors.background.drawer,
+          '--hover-color': colors.text.title,
+        } as React.CSSProperties
+      }
+    >
+      <CardContent className="p-4 flex flex-col gap-1">
+        <div className="flex items-center gap-3 ml-2.5">
+          <User className="h-4 w-4 text-gray-600" />
+          <span className="text-sm">이름: </span>
+          <span className="text-sm">{name}</span>
+        </div>
 
-        <Box sx={{ display: 'flex', gap: 1, ml: '10px' }}>
-          <PhoneAndroidIcon fontSize="small" sx={{ color: colors.text.primary }} />
-          <AText text={'번호: '} />
-          <AText text={tel} />
-        </Box>
+        <div className="flex items-center gap-3 ml-2.5">
+          <Phone className="h-4 w-4 text-gray-600" />
+          <span className="text-sm">번호: </span>
+          <span className="text-sm">{tel}</span>
+        </div>
 
-        <Box sx={{ display: 'flex', gap: 1, ml: '10px' }}>
-          <HomeIcon fontSize="small" sx={{ color: colors.text.primary }} />
-          <AText text={'주소: '} />
-          <AText text={address} />
-        </Box>
+        <div className="flex items-center gap-3 ml-2.5">
+          <Home className="h-4 w-4 text-gray-600" />
+          <span className="text-sm">주소: </span>
+          <span className="text-sm">{address}</span>
+        </div>
       </CardContent>
-    </>
+    </Card>
   );
 };
 

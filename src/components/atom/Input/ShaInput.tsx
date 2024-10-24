@@ -17,7 +17,7 @@ export type ShaInputProps = {
   value?: string;
   size?: InputSize;
   showError?: boolean; // 폼 제출 시도 여부를 나타내는 새로운 prop
-  onChange?: (value: string) => void;
+  onChange?: (value: string) => void ;
 };
 
 const ShaInput = ({

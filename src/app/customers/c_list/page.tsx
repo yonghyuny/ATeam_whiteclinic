@@ -1,10 +1,8 @@
 'use client';
 
-import CenteredLayout from '@/styles/layout/CenterLayout';
 import ADataGrid from '@/components/molecules/datagrid/ADataGrid';
+
 import { CustomerInfo } from '@/constants/CustomerInfo';
-import AButton from '@/components/atom/Button/AButton';
-import { Box } from '@mui/material';
 import { customerColumns } from '@/constants/yh/ColumnData';
 
 const Page = () => {
@@ -17,17 +15,16 @@ const Page = () => {
     rows,
     columns: customerColumns,
     title: `고객 정보`,
-    height: 'auto',
-    width: '90%',
   };
 
   return (
-    <Box sx={{ width: '100vw', display: 'flex', justifyContent: 'center' }}>
-      <Box sx={{ overflowY: 'auto', width: '90%' }}>
+    // p-6 대신 p-4나 p-2로 패딩을 줄여볼 수 있습니다
+    <div className="w-full flex justify-center p-4">
+      {/* overflow-y-auto만 남기고 width를 full로 변경 */}
+      <div className="w-full overflow-y-auto">
         <ADataGrid {...customerDataProps} />
-        {/* <AButton text="등록" /> */}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

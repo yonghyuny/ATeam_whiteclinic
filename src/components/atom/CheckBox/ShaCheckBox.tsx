@@ -18,7 +18,7 @@ export type CheckboxProps = {
 
 const ShaCheckbox = ({ isChecked = false, onChange, textprops }: CheckboxProps) => {
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex justify-center items-center h-full w-full">
       <Checkbox checked={isChecked} onCheckedChange={onChange} />
       {textprops?.text && (
         <Label

@@ -1,7 +1,5 @@
 import React from 'react';
 import { Box, Divider } from '@mui/material';
-
-import { sizes } from '@/styles/sizes';
 import AText from '@/components/atom/Text/AText';
 
 export type FooterItem = {
