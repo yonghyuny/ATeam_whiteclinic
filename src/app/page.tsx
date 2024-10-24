@@ -9,7 +9,6 @@ const Home = () => {
   return (
     <>
       <ACalendar></ACalendar>
-      <TestBtn></TestBtn>
     </>
   );
 };

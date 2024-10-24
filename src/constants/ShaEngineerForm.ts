@@ -1,11 +1,5 @@
-import { ADropdownProps } from '@/components/atom/DropdownBox/ADropdown';
-import { AFixedInputProps } from '@/components/atom/Input/FixedInput/AFixedInput';
-import { LabelCheckBoxProps } from '@/components/molecules/Engineer/LabelCheckBox';
 import { Days } from './Days';
 import { Percentage } from './Percentage';
-import dayjs, { Dayjs } from 'dayjs';
-import { HolidayProps } from '@/components/molecules/Engineer/Holiday';
-import { HolidayRegistrationProps } from '@/components/molecules/Engineer/HolidayRegistration';
 import { ShaTitledFormControlProps } from '@/components/molecules/Form/ShaTitledFormControl';
 import { ShaFormFieldType } from '@/components/molecules/Form/ShaFormField';
 import { ShaInputProps } from '@/components/atom/Input/ShaInput';
