@@ -9,8 +9,17 @@ export type TextProps = {
 };
 
 const AText = ({ text, size = 'medium', color = 'default' }: TextProps) => {
+  // ShaCheckbox가 포함된 경우에는 div로, 그 외에는 p로 렌더링
+  const isComponent = typeof text !== 'string' && typeof text !== 'number';
+
   return (
-    <Typography sx={{ fontSize: sizes.fontSize[size], color: colors.text[color] }}>
+    <Typography
+      component={isComponent ? 'div' : 'p'}
+      sx={{
+        fontSize: sizes.fontSize[size],
+        color: colors.text[color],
+      }}
+    >
       {text}
     </Typography>
   );

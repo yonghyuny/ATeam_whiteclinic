@@ -31,6 +31,7 @@ import {
 } from '@/components/ui/table';
 import { ChevronDownIcon } from 'lucide-react';
 import ShaInput from '@/components/atom/Input/ShaInput';
+import ShaButton from '@/components/atom/Button/ShaButton';
 
 type ADataGridProps = {
   rows: any[];

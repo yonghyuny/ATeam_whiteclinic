@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { ReactNode } from 'react';
 
 export type ShaButtonProps = {
   variant?: 'default' | 'secondary' | 'outline';
@@ -13,16 +14,28 @@ export type ShaButtonProps = {
     | '추가등록'
     | '급여사항확인'
     | '휴무등록'
-    | '추가등록';
+    | '추가등록'
+    | '검색'
+    | '수정 완료'
+    | '저장';
+    
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   size?: 'default' | 'sm' | 'lg' | 'icon' | 'full';
   disabled?: boolean;
+  children?: ReactNode;
 };
 
-const ShaButton = ({ variant, text, onClick, size, disabled = false }: ShaButtonProps) => {
+const ShaButton = ({
+  variant,
+  text,
+  onClick,
+  size,
+  disabled = false,
+  children,
+}: ShaButtonProps) => {
   return (
     <Button variant={variant} onClick={onClick} size={size} disabled={disabled}>
-      {text}
+      {text} {children}
     </Button>
   );
 };

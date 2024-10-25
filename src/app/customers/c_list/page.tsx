@@ -18,9 +18,9 @@ const Page = () => {
   };
 
   return (
-    // p-6 대신 p-4나 p-2로 패딩을 줄여볼 수 있습니다
+    
     <div className="w-full flex justify-center p-4">
-      {/* overflow-y-auto만 남기고 width를 full로 변경 */}
+   
       <div className="w-full overflow-y-auto">
         <ADataGrid {...customerDataProps} />
       </div>
