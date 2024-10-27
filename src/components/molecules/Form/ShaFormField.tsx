@@ -19,6 +19,9 @@ import ShaCheckboxDropdownSelector, {
 } from '../Customer/ShaCheckBoxDropDownSelector';
 import ShaNumericInput, { ShaNumericInputProps } from '../input/ShaNumericInput';
 import ShaDiscountCheckbox, { ShaDiscountCheckboxProps } from '../Customer/ShaDiscountCheckBox';
+import ShaDateSchedulePicker, {
+  ShaDateSchedulePickerProps,
+} from '@/components/molecules/ADateTimePicker/ShaDateSchedulePicker';
 
 // 타입 정의는 기존과 유사하게 유지
 export type ShaFormFieldType =
@@ -34,7 +37,8 @@ export type ShaFormFieldType =
   | 'ShaOneCheckbox'
   | 'ShaCheckboxDropdownSelector'
   | 'ShaNumericInput'
-  | 'ShaDiscountCheckbox';
+  | 'ShaDiscountCheckbox'
+  | 'ShaDateSchedulePicker';
 export type ShaFormFieldConfigProps = {
   formfieldtype: ShaFormFieldType;
   prevprops?:
@@ -50,7 +54,8 @@ export type ShaFormFieldConfigProps = {
     | ShaOneCheckboxProps
     | ShaCheckboxDropdownSelectorProps
     | ShaNumericInputProps
-    | ShaDiscountCheckboxProps;
+    | ShaDiscountCheckboxProps
+    | ShaDateSchedulePickerProps;
 };
 
 export type ShaFormFieldProps = {
@@ -72,6 +77,7 @@ const fieldTypeToComponentMap: Record<ShaFormFieldType, React.ElementType> = {
   ShaCheckboxDropdownSelector,
   ShaNumericInput,
   ShaDiscountCheckbox,
+  ShaDateSchedulePicker,
 };
 
 const ShaFormField = ({ fields }: ShaFormFieldProps) => {

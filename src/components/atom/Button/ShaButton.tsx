@@ -13,7 +13,8 @@ export type ShaButtonProps = {
     | '추가등록'
     | '급여사항확인'
     | '휴무등록'
-    | '추가등록';
+    | '추가등록'
+    | '전달';
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   size?: 'default' | 'sm' | 'lg' | 'icon' | 'full';
   disabled?: boolean;

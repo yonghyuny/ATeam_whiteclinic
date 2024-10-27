@@ -1,7 +1,7 @@
 'use client';
 
-import CEditSchedule from '@/components/organism/BShowSchedule/CEditSchedule';
+import ShaScheduleRes from '@/components/organism/Schedule/ShaScheduleRes';
 
 export default function Page() {
-  return <CEditSchedule />;
+  return <ShaScheduleRes />;
 }

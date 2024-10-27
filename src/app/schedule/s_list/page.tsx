@@ -1,9 +1,14 @@
 'use client';
 
-import ScheduleShowTable from '@/components/organism/Schedule/ScheduleShowTable';
+import ShaScheduleShowTable from '@/components/organism/Schedule/ShaScheduleShowTable';
+import CenteredLayout from '@/styles/layout/CenterLayout';
 
 const Page = () => {
-  return <ScheduleShowTable />;
+  return (
+    <CenteredLayout>
+      <ShaScheduleShowTable />;
+    </CenteredLayout>
+  );
 };
 
 export default Page;

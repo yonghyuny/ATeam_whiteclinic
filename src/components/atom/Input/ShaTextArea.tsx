@@ -15,6 +15,7 @@ export type ShaTextareaProps = {
   size?: TextAreaSize;
   rows?: number;
   onChange?: (value: string) => void;
+  disable?: boolean;
 };
 
 const ShaTextarea = ({
@@ -24,6 +25,7 @@ const ShaTextarea = ({
   value,
   size = 'medium',
   rows = 4,
+  disable = false,
   onChange,
   ...props
 }: ShaTextareaProps) => {
