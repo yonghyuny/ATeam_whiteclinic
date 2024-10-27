@@ -2,8 +2,8 @@ export type CustomerProps = {
   name: string;
   tel: string;
   address: string;
-  info: string;
   bookingDate: string;
+  info: string;
   engineer: string;
   cleaning: '세탁기' | '에어컨';
   bill: boolean;

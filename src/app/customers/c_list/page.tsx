@@ -1,10 +1,8 @@
 'use client';
 
-import CenteredLayout from '@/styles/layout/CenterLayout';
 import ADataGrid from '@/components/molecules/datagrid/ADataGrid';
+
 import { CustomerInfo } from '@/constants/CustomerInfo';
-import AButton from '@/components/atom/Button/AButton';
-import { Box } from '@mui/material';
 import { customerColumns } from '@/constants/yh/ColumnData';
 
 const Page = () => {
@@ -17,17 +15,16 @@ const Page = () => {
     rows,
     columns: customerColumns,
     title: `고객 정보`,
-    height: 'auto',
-    width: '90%',
   };
 
   return (
-    <Box sx={{ width: '100vw', display: 'flex', justifyContent: 'center' }}>
-      <Box sx={{ overflowY: 'auto', width: '90%' }}>
+    
+    <div className="w-full flex justify-center p-4">
+   
+      <div className="w-full overflow-y-auto">
         <ADataGrid {...customerDataProps} />
-        {/* <AButton text="등록" /> */}
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

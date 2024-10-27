@@ -99,13 +99,26 @@ const ACalendar: React.FC<CustomCalendarProps> = ({ events = [], onEventAdd, onE
   };
 
   return (
-    <Box sx={{ height: '100%', maxWidth: '80%', margin: '0 auto' }}>
+    <Box
+      sx={{
+        height: 'calc(100vh - 200px)', // 전체 높이에서 여유 공간을 뺀 값
+        width: '100%', // maxWidth 대신 width 사용
+        margin: '0 auto',
+        padding: '20px',
+        '@media (max-width: 1024px)': {
+          height: 'calc(100vh - 150px)',
+        },
+      }}
+    >
       <Calendar<CustomEvent>
         localizer={localizer}
         events={events}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: 'calc(100% - 50px)' }}
+        style={{
+          height: '100%',
+          minHeight: '500px', // 최소 높이 설정
+        }}
         views={['month']}
         components={{
           toolbar: (toolbarProps) => <CustomToolbar {...toolbarProps} />,

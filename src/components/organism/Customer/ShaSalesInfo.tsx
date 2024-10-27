@@ -91,6 +91,7 @@ const ShaSalesInfo = () => {
       isDiscountApplied,
       isFinalPriceManual,
       finalPrice,
+      customProduct,
     } = data;
 
     if (!selectedCategory || !selectedDropdownValue) return 0;
@@ -124,6 +125,7 @@ const ShaSalesInfo = () => {
     formValues.discountAmount,
     formValues.isDiscountApplied,
     formValues.isFinalPriceManual,
+    formValues.customProduct,
   ]);
 
   const resetForm = () => {
@@ -151,6 +153,7 @@ const ShaSalesInfo = () => {
         할인적용여부: formValues.isDiscountApplied,
         할인금액: formValues.discountAmount,
         최종금액: formValues.finalPrice,
+        에어컨스탠드: formValues.customProduct,
       });
     }
   };

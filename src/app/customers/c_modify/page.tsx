@@ -1,5 +1,7 @@
+'use client';
+
 const Page = () => {
-  return <div>회원 수정 하기</div>;
+  return;
 };
 
 export default Page;

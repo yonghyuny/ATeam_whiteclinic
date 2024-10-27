@@ -1,6 +1,7 @@
 import { WorkerProps } from '@/constants/Workers';
 import { FooterItem } from '@/components/molecules/datagrid/AFooter';
-import ACheckbox from '@/components/atom/CheckBox/ACheckbox';
+import ShaCheckbox from '@/components/atom/CheckBox/ShaCheckBox';
+
 
 const calculateWageAmount = (worker: WorkerProps): number => {
   const totalWage = worker.datePay?.reduce((sum, dp) => sum + parseInt(dp.pay), 0) || 0;
@@ -24,11 +25,11 @@ export const getFooterData = (worker: WorkerProps): FooterItem[] => {
       label: '지급 여부',
       value: worker.ispaid,
       renderValue: (value) => (
-        <ACheckbox
+        <ShaCheckbox
           isChecked={value as boolean}
-          onChange={(event) => {
+          onChange={(checked) => {
             // 여기에 체크박스 상태 변경 로직을 추가합니다.
-            console.log(`클릭`);
+            console.log(`클릭`, checked);
           }}
         />
       ),
