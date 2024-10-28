@@ -2,12 +2,12 @@ import { TitledFormControlProps } from '@/components/molecules/Form/TitledFormCo
 import { FormFieldType } from '@/components/molecules/Form/FormField';
 import { ADropdownProps } from '@/components/atom/DropdownBox/ADropdown';
 import { AFixedInputProps } from '@/components/atom/Input/FixedInput/AFixedInput';
-import { LabelCheckBoxProps } from '@/components/molecules/Engineer/LabelCheckBox';
+import { LabelCheckBoxProps } from '@/constants/delete/LabelCheckBox';
 import { Days } from './Days';
 import { Percentage } from './Percentage';
 import dayjs, { Dayjs } from 'dayjs';
-import { HolidayProps } from '@/components/molecules/Engineer/Holiday';
-import { HolidayRegistrationProps } from '@/components/molecules/Engineer/HolidayRegistration';
+import { HolidayProps } from '@/constants/delete/Holiday';
+import { HolidayRegistrationProps } from '@/constants/delete/HolidayRegistration';
 
 export type EngineerFormValues = {
   name: string;

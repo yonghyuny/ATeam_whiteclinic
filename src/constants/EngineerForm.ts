@@ -1,6 +1,6 @@
 import { ADropdownProps } from '@/components/atom/DropdownBox/ADropdown';
 import { AFixedInputProps } from '@/components/atom/Input/FixedInput/AFixedInput';
-import { LabelCheckBoxProps } from '@/components/molecules/Engineer/LabelCheckBox';
+import { LabelCheckBoxProps } from '@/constants/delete/LabelCheckBox';
 import { FormFieldType, FormFieldConfigProps } from '@/components/molecules/Form/FormField';
 import { TitledFormControlProps } from '@/components/molecules/Form/TitledFormControl';
 import { Days } from './Days';

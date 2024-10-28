@@ -1,10 +1,10 @@
 import { TitledFormControlProps } from '@/components/molecules/Form/TitledFormControl';
 import { FormFieldType } from '@/components/molecules/Form/FormField';
-import { CheckboxDropdownSelectorProps } from '@/components/molecules/Customer/CheckboxDropdownSelector';
+import { CheckboxDropdownSelectorProps } from '@/constants/delete/CheckboxDropdownSelector';
 import { productCategories } from '@/constants/productCategory';
 import { OneCheckboxProps } from '@/components/molecules/checkbox/OneCheckbox';
-import { ANumericInputProps } from '@/components/molecules/input/ANumericInput';
-import { DiscountCheckboxProps } from '@/components/molecules/Customer/DiscountCheckbox';
+import { ANumericInputProps } from '@/constants/delete/ANumericInput';
+import { DiscountCheckboxProps } from '@/constants/delete/DiscountCheckbox';
 import { AFixedInputProps } from '@/components/atom/Input/FixedInput/AFixedInput';
 import { CheckboxProps } from '@/components/atom/CheckBox/ACheckbox';
 import { ADropdownProps } from '@/components/atom/DropdownBox/ADropdown';

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
-import OneCheckbox, { OneCheckboxProps } from '../checkbox/OneCheckbox';
+import OneCheckbox, { OneCheckboxProps } from '../../components/molecules/checkbox/OneCheckbox';
 import ADropdown, { ADropdownProps } from '@/components/atom/DropdownBox/ADropdown';
 import { productCategories } from '@/constants/productCategory';
 import AVariableInput from '@/components/atom/Input/VariableInput/AVariableInput';

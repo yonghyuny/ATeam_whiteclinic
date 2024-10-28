@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Box } from '@mui/material';
-import ModalButton from '@/components/molecules/Customer/ModalButton';
+import ModalButton from '@/constants/delete/ModalButton';
 import InfoForm from '@/components/molecules/Form/InfoForm';
 import { salesInfoFormData } from '@/constants/salesInfoFormData';
 import { productCategories } from '@/constants/productCategory';

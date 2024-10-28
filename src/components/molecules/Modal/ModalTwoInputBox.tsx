@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ModalFormContentsStyle, ModalFormStyle } from '@/styles/mui';
 import { Box } from '@mui/material';
-import ModalTwoButtons from '../Button/ModalTwoButton';
+import ModalTwoButtons from '../../../constants/delete/ModalTwoButton';
 
 export type ModalTwoInputBoxProps = {
   title: string;

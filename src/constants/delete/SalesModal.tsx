@@ -1,6 +1,6 @@
 import { Box, Modal } from '@mui/material';
 import ModalContent, { ModalContentProps } from './ModalContent';
-import ModalTwoButtons from '../Button/ModalTwoButton';
+import ModalTwoButtons from './ModalTwoButton';
 
 export type SalesModalProps = {
   open: boolean;

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Box } from '@mui/material';
-import ANumericInput, { ANumericInputProps } from '../input/ANumericInput';
+import ANumericInput, { ANumericInputProps } from './ANumericInput';
 import ACheckbox, { CheckboxProps } from '@/components/atom/CheckBox/ACheckbox';
 
 export type DiscountCheckboxProps = {

@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 import InfoForm from '@/components/molecules/Form/InfoForm';
 import { EngineerFormData, EngineerFormValues } from '@/constants/EnginnerFormData';
 import CenteredLayout from '@/styles/layout/CenterLayout';
-import TwoButtons from '../Button/ShaTwoButton';
+import TwoButtons from '../../components/molecules/Button/ShaTwoButton';
 
 type RegisterProps = {
   onRegister?: () => void;
