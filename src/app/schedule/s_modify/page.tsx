@@ -1,9 +1,9 @@
 'use client';
 
-import ScheduleShowTable from '@/components/organism/Schedule/ScheduleShowTable';
+import AScheduleEdit from '@/components/organism/Schedule/AScheduleEdit';
 
 const Page = () => {
-  return <ScheduleShowTable />;
+  return <AScheduleEdit />;
 };
 
 export default Page;

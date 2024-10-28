@@ -76,6 +76,9 @@ export const getOrdersByEngineerAndDate = (engineerId: number, date: Date): Orde
       startTime: '2024-10-23T10:00:00',
       endTime: '2024-10-23T11:00:00',
       engineerId: 1,
+      product: '세탁기',
+      finalPrice: 230000,
+      itemCount: 2,
     },
     {
       orderId: 2,
@@ -90,6 +93,9 @@ export const getOrdersByEngineerAndDate = (engineerId: number, date: Date): Orde
       startTime: '2024-10-23T13:00:00',
       endTime: '2024-10-23T13:30:00',
       engineerId: 2,
+      product: '드럼',
+      finalPrice: 129000,
+      itemCount: 2,
     },
     {
       orderId: 3,
@@ -104,6 +110,9 @@ export const getOrdersByEngineerAndDate = (engineerId: number, date: Date): Orde
       startTime: '2024-10-23T16:00:00',
       endTime: '2024-10-23T17:00:00',
       engineerId: 3,
+      product: '통돌이',
+      finalPrice: 100000,
+      itemCount: 1,
     },
   ];
 

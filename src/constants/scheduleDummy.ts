@@ -1,3 +1,5 @@
+import { productCategories } from './productCategory';
+
 // 스케쥴 등록에 사용할 Order와 Engineer에 대한 더미 데이터
 export const orderData = [
   {

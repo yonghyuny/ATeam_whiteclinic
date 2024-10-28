@@ -103,9 +103,14 @@ export const ShaScheduleResFormData = (
           {
             formfieldtype: 'ShaTextarea' as ShaFormFieldType,
             prevprops: {
+              size: 'large',
               placeholder: '선택한 주문 정보가 여기에 표시됩니다',
               value: selectedOrderInfo
-                ? `${selectedOrderInfo.name}, ${selectedOrderInfo.phoneNumber}, ${selectedOrderInfo.address}, ${selectedOrderInfo.uniqueDetails}`
+                ? `${selectedOrderInfo.name}, ${selectedOrderInfo.phoneNumber}, ${
+                    selectedOrderInfo.address
+                  }, ${selectedOrderInfo.uniqueDetails}, ${new Date(
+                    selectedOrderInfo.startTime
+                  ).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })} `
                 : '',
               disabled: true,
             } as ShaTextareaProps,
@@ -152,6 +157,7 @@ export const ShaScheduleResFormData = (
           {
             formfieldtype: 'ShaTextarea' as ShaFormFieldType,
             prevprops: {
+              size: 'large',
               placeholder: '선택한 기사 정보가 여기에 표시됩니다',
               value: selectedEngineerInfo
                 ? `${selectedEngineerInfo.name}, ${

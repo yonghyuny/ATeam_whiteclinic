@@ -3,6 +3,7 @@ import { Order } from '@/constants/ScheduleType';
 import { timeSlots } from '@/constants/timeSlots';
 import React from 'react';
 
+//스케쥴 ROW 테이블 설정
 const ShaGenerateTableRows: React.FC<{ scheduleData: Order[] }> = ({ scheduleData }) => {
   const slotTimes = timeSlots.map((_, index) => {
     const slotStartTime = new Date(`2024-10-23T${index + 8}:00:00`).getTime();
@@ -23,15 +24,15 @@ const ShaGenerateTableRows: React.FC<{ scheduleData: Order[] }> = ({ scheduleDat
 
         return (
           <TableRow key={slot}>
-            <TableCell className="sticky left-0 bg-gray-50">{slot}</TableCell>
+            <TableCell className="sticky left-0 bg-gray-50 w-44">{slot}</TableCell>
             {slotOrders.length > 0 ? (
               slotOrders.map((order) => (
                 <React.Fragment key={order.orderId}>
                   <TableCell>{order.name}</TableCell>
                   <TableCell>{order.address}</TableCell>
                   <TableCell>{order.phoneNumber}</TableCell>
-                  <TableCell>{order.document}</TableCell>
-                  <TableCell>[order.itemCount]</TableCell>
+                  <TableCell>{order.product}</TableCell>
+                  <TableCell>{order.itemCount}</TableCell>
                   <TableCell>{order.finalPrice}</TableCell>
                   <TableCell>{order.uniqueDetails}</TableCell>
                 </React.Fragment>
