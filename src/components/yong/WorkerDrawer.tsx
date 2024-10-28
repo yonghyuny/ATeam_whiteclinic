@@ -53,7 +53,7 @@ const WorkerDrawer = ({
         ([_, engineer]) =>
           engineer.name.toLowerCase().includes(filter.toLowerCase()) ||
           engineer.location.toLowerCase().includes(filter.toLowerCase()) ||
-          engineer.phone_number.includes(filter)
+          engineer.phoneNumber.includes(filter)
       );
   }, [engineers, filter]);
 

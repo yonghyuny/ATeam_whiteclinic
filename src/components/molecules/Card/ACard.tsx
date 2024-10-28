@@ -5,7 +5,7 @@ import { User, Phone, Home } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { colors } from '@/styles/colors';
 
-interface ACardProps {
+type ACardProps =  {
   name: string;
   tel: string;
   address: string;

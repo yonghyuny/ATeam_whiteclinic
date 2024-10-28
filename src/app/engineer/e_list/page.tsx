@@ -86,7 +86,12 @@ const Page = () => {
         const response = await api.get<ApiResponse>('engineer-info/getAll');
         console.log('Raw API Response:', response.data);
 
-        const { engineer, engineerPay, engineerPayDay, EngineerCommissionRates } = response.data;
+        const {
+          engineer,
+          engineerPay,
+          engineerPayDay,
+          EngineerCommissionRates
+        } = response.data;
 
         console.log('Engineer Data:', engineer);
         console.log('Engineer Pay Data:', engineerPay);
@@ -94,13 +99,19 @@ const Page = () => {
         console.log('Commission Rates Data:', EngineerCommissionRates);
 
         const processedEngineers: EngineerWithDetails[] = engineer.map((eng) => {
-          const payments = engineerPay.filter((pay) => pay.engineerId === eng.id);
+          const payments = engineerPay.filter(
+            (pay) => pay.engineerId === eng.id
+          );
           console.log(`Payments for engineer ${eng.id}:`, payments);
 
-          const payDay = engineerPayDay.find((day) => day.engineerId === eng.id);
+          const payDay = engineerPayDay.find(
+            (day) => day.engineerId === eng.id
+          );
           console.log(`PayDay for engineer ${eng.id}:`, payDay);
 
-          const commission = EngineerCommissionRates.find((rate) => rate.engineerId === eng.id);
+          const commission = EngineerCommissionRates.find(
+            (rate) => rate.engineerId === eng.id
+          );
           console.log(`Commission for engineer ${eng.id}:`, commission);
 
           const processed = {
@@ -114,8 +125,8 @@ const Page = () => {
             is_paid: payDay ? payDay.is_pay : false,
             daily_earnings: payments.map((pay) => ({
               date: pay.date,
-              daily_amount: pay.daily_amount,
-            })),
+              daily_amount: pay.daily_amount
+            }))
           };
           console.log(`Processed engineer ${eng.id}:`, processed);
           return processed;
@@ -128,7 +139,7 @@ const Page = () => {
           console.error('Error details:', {
             status: error.response?.status,
             data: error.response?.data,
-            message: error.message,
+            message: error.message
           });
         }
       }
