@@ -8,7 +8,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ShaButton from '@/components/atom/Button/ShaButton';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { mkConfig, generateCsv, download } from 'export-to-csv';
 
+//리팩토링, 최적화 안함. 추후 작업예정
 const ShaScheduleShowTable = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [engineerList, setEngineerList] = useState<Engineer[]>([]);
@@ -43,7 +45,50 @@ const ShaScheduleShowTable = () => {
     router.push('/customers/c_modify');
   };
 
-  const handleExportBtnClick = () => {};
+  const exportToCsv = () => {
+    const csvOptions = mkConfig({
+      filename: `${selectedDate?.toLocaleDateString('ko-KR')}_${selectedEngineerName}_스케쥴`,
+      fieldSeparator: ',',
+      quoteStrings: true,
+      decimalSeparator: '.',
+      showTitle: true,
+      useBom: true,
+      columnHeaders: [
+        { key: 'orderId', displayLabel: '주문번호' },
+        { key: 'reservationDateTime', displayLabel: '예약 날짜' },
+        { key: 'name', displayLabel: '이름' },
+        { key: 'phoneNumber', displayLabel: '전화번호' },
+        { key: 'address', displayLabel: '주소' },
+        { key: 'product', displayLabel: '세척 물품' },
+        { key: 'itemCount', displayLabel: '세척대수' },
+        { key: 'uniqueDetails', displayLabel: '특이사항' },
+        { key: 'finalPrice', displayLabel: '비용' },
+        { key: 'startTime', displayLabel: '예약 시간' },
+      ],
+    });
+
+    const data = scheduleData.map((order) => ({
+      orderId: order.orderId,
+      reservationDateTime: order.reservationDateTime
+        ? order.reservationDateTime.toLocaleString()
+        : '예약 날짜',
+      name: order.name,
+      phoneNumber: order.phoneNumber,
+      address: order.address,
+      product: order.product,
+      itemCount: order.itemCount,
+      uniqueDetails: order.uniqueDetails,
+      finalPrice: order.finalPrice,
+      startTime: new Date(order.startTime).toLocaleString(),
+    }));
+
+    const csvOutput = generateCsv(csvOptions)(data);
+    download(csvOptions)(csvOutput);
+  };
+
+  const handleExportBtnClick = () => {
+    exportToCsv();
+  };
   return (
     <div className="flex flex-row items-center justify-center min-h-screen py-12 px-4 gap-12">
       <div className="flex flex-col gap-2">

@@ -1,3 +1,5 @@
+import { productCategories } from './productCategory';
+
 export type EngineerFormValues = {
   phoneNumber: string;
   residenceArea: string;
@@ -32,4 +34,21 @@ export type Order = CustomerInfoValues & {
   startTime: string;
   endTime: string;
   engineerId: number;
+  finalPrice: number;
+  itemCount: number;
+  product: string;
+};
+
+type ProductCategoryKey = keyof typeof productCategories;
+
+export type SalesFormData = {
+  selectedCategory: ProductCategoryKey | '';
+  selectedDropdownValue: string;
+  itemCount: number;
+  discountAmount: number;
+  finalPrice: number;
+  uniqueDetails: string;
+  customProduct: string;
+  isDiscountApplied: boolean;
+  isFinalPriceManual: boolean;
 };

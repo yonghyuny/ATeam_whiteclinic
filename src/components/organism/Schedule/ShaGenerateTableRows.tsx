@@ -31,8 +31,8 @@ const ShaGenerateTableRows: React.FC<{ scheduleData: Order[] }> = ({ scheduleDat
                   <TableCell>{order.address}</TableCell>
                   <TableCell>{order.phoneNumber}</TableCell>
                   <TableCell>{order.document}</TableCell>
-                  <TableCell>1</TableCell>
-                  <TableCell>{order.payment}</TableCell>
+                  <TableCell>[order.itemCount]</TableCell>
+                  <TableCell>{order.finalPrice}</TableCell>
                   <TableCell>{order.uniqueDetails}</TableCell>
                 </React.Fragment>
               ))
