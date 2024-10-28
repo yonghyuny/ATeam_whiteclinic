@@ -16,7 +16,7 @@ import {
 
 //!!아직 코드 안나눔 + 리팩토링 안함!!
 
-// 주문 정보 타입 정의
+// 보여질 예약 주문 정보 타입 정의
 type Order = {
   id: string;
   details: string;
@@ -34,6 +34,7 @@ type Engineer = {
   orders: { id: string; startTime: string; endTime: string }[];
 };
 
+//임의로 더미데이터 집어넣어서 테스트함. api로 변경 예정
 const fetchOrderData = async (selectedDate: Date): Promise<OrderInfo[]> => {
   return orderData
     .filter((order) => {
@@ -43,14 +44,15 @@ const fetchOrderData = async (selectedDate: Date): Promise<OrderInfo[]> => {
     .map((order) => ({
       id: order.id,
       name: order.details,
-      phoneNumber: order.phoneNumber, // 더미 데이터 필요
-      address: order.address, // 더미 데이터 필요
-      uniqueDetails: order.uniqueDetails, // 더미 데이터 필요
-      startTime: order.startTime, // startTime 속성 추가
-      endTime: order.endTime, // endTime 속성 추가
+      phoneNumber: order.phoneNumber,
+      address: order.address,
+      uniqueDetails: order.uniqueDetails,
+      startTime: order.startTime,
+      endTime: order.endTime,
     }));
 };
 
+//임의로 더미데이터 집어넣어서 테스트함. api로 변경 예정
 const fetchEngineerData = async (
   selectedDate: Date,
   selectedOrder: string
@@ -88,6 +90,7 @@ const engineerHasOrderAtTime = (engineer: Engineer, selectedOrder: Order) => {
   });
 };
 
+//컴포넌트
 const ShaScheduleRes = () => {
   const [formValues, setFormValues] = useState<ShaScheduleResFormValues>({
     reservationDateTime: null,

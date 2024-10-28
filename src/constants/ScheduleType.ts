@@ -28,7 +28,7 @@ export type CustomerInfoValues = {
   payment: number;
 };
 
-// Order 타입 정의
+// 스케쥴용 Order 타입 정의
 export type Order = CustomerInfoValues & {
   orderId: number;
   startTime: string;
@@ -37,18 +37,4 @@ export type Order = CustomerInfoValues & {
   finalPrice: number;
   itemCount: number;
   product: string;
-};
-
-type ProductCategoryKey = keyof typeof productCategories;
-
-export type SalesFormData = {
-  selectedCategory: ProductCategoryKey | '';
-  selectedDropdownValue: string;
-  itemCount: number;
-  discountAmount: number;
-  finalPrice: number;
-  uniqueDetails: string;
-  customProduct: string;
-  isDiscountApplied: boolean;
-  isFinalPriceManual: boolean;
 };

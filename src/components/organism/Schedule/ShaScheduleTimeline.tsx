@@ -2,6 +2,7 @@ import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components
 import ShaGenerateTableRows from './ShaGenerateTableRows';
 import { Order } from '@/constants/ScheduleType';
 
+//스케쥴 보기 column 지정
 type ShaScheduleTimelineProps = {
   scheduleData: Order[]; // Order[]로 타입을 수정
 };
