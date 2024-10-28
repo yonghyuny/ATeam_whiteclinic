@@ -13,40 +13,56 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
-import { WorkerProps, WorkerType } from '@/constants/Workers';
 import { AlignJustify } from 'lucide-react';
 import CardFilter from '../organism/yh/CardFilter';
 
-interface WorkerDrawerProps {
-  WorkerInfo: WorkerType;
-  onWorkerSelect: (worker: WorkerProps) => void;
+type Engineer = {
+  id: number;
+  name: string;
+  phoneNumber: string;
+  location: string;
+  skills: string[];
+  commission_rate: number;
+  payday: string;
+  is_paid: boolean;
+  daily_earnings: Array<{
+    date: string;
+    daily_amount: number;
+  }>;
+};
+
+type WorkerDrawerProps = {
+  engineers: Engineer[]; // 객체 대신 배열로 변경
+  onEngineerSelect: (engineer: Engineer) => void;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-}
+};
 
-const WorkerDrawer: React.FC<WorkerDrawerProps> = ({
-  WorkerInfo,
-  onWorkerSelect,
+const WorkerDrawer = ({
+  engineers = [], // 기본값을 빈 배열로 설정
+  onEngineerSelect,
   open,
   onOpenChange,
-}) => {
+}: WorkerDrawerProps) => {
   const [filter, setFilter] = React.useState('');
 
-  const filteredWorkers = React.useMemo(() => {
-    return Object.entries(WorkerInfo).filter(
-      ([_, worker]) =>
-        worker.name.toLowerCase().includes(filter.toLowerCase()) ||
-        worker.address.toLowerCase().includes(filter.toLowerCase()) ||
-        worker.tel.includes(filter)
-    );
-  }, [WorkerInfo, filter]);
+  const filteredEngineers = React.useMemo(() => {
+    return engineers
+      .map((engineer, index) => [`engineer${index}`, engineer] as [string, Engineer])
+      .filter(
+        ([_, engineer]) =>
+          engineer.name.toLowerCase().includes(filter.toLowerCase()) ||
+          engineer.location.toLowerCase().includes(filter.toLowerCase()) ||
+          engineer.phone_number.includes(filter)
+      );
+  }, [engineers, filter]);
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilter(event.target.value);
   };
 
-  const handleWorkerSelect = (worker: WorkerProps) => {
-    onWorkerSelect(worker);
+  const handleEngineerSelect = (engineer: Engineer) => {
+    onEngineerSelect(engineer);
     onOpenChange(false);
   };
 
@@ -54,11 +70,10 @@ const WorkerDrawer: React.FC<WorkerDrawerProps> = ({
     <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerTrigger asChild>
         <Button variant="outline">
-          <AlignJustify /> {/* 아이콘임 */}
+          <AlignJustify />
         </Button>
       </DrawerTrigger>
       <DrawerContent className="w-[350px] h-full">
-        {/* 혹시 검색창 옮길시 left-[xxxpx로 설정하기] */}
         <div className="m- w-full h-full flex flex-col items-center">
           <DrawerHeader>
             <div className="flex justify-end">
@@ -67,16 +82,16 @@ const WorkerDrawer: React.FC<WorkerDrawerProps> = ({
                   <X className="h-4 w-4" />
                 </Button>
               </DrawerClose>
-            </div> 
-           <DrawerTitle>Move Goal</DrawerTitle>
-            <DrawerDescription>Set your daily activity goal.</DrawerDescription> 
+            </div>
+            <DrawerTitle>기사 목록</DrawerTitle>
+            <DrawerDescription>기사를 선택하여 일정을 확인하세요.</DrawerDescription>
           </DrawerHeader>
 
           <CardFilter
-            data={filteredWorkers}
+            data={filteredEngineers}
             filter={filter}
             onFilterChange={handleFilterChange}
-            onItemClick={handleWorkerSelect}
+            onItemClick={([_, engineer]) => handleEngineerSelect(engineer)}
           />
 
           <DrawerFooter>{/* 공란으로 둘것 */}</DrawerFooter>

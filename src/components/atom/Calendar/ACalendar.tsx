@@ -13,11 +13,13 @@ import TodayIcon from '@mui/icons-material/Today';
 moment.locale('ko');
 const localizer = momentLocalizer(moment);
 
-interface CustomEvent extends Event {
+export type CalendarEventType = Event & {
   user?: string;
   createdAt?: Date;
   createdBy?: string;
-}
+  amount?: number;
+  allDay?: boolean;
+};
 
 interface CustomToolbarProps extends ToolbarProps {
   onSearch?: (searchTerm: string) => void;
@@ -68,27 +70,14 @@ const CustomToolbar: React.FC<CustomToolbarProps> = ({ date, onNavigate }) => {
 };
 
 interface CustomCalendarProps {
-  events?: CustomEvent[];
-  onEventAdd?: (event: CustomEvent) => void;
-  onEventSelect?: (event: CustomEvent) => void;
+  events?: CalendarEventType[];
+  onEventSelect?: (event: CalendarEventType) => void;
 }
 
-const ACalendar: React.FC<CustomCalendarProps> = ({ events = [], onEventAdd, onEventSelect }) => {
+const ACalendar: React.FC<CustomCalendarProps> = ({ events = [], onEventSelect }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
 
-  const handleSelectSlot = (slotInfo: { start: Date; end: Date }) => {
-    if (onEventAdd) {
-      const newEvent: CustomEvent = {
-        title: '새 이벤트',
-        start: slotInfo.start,
-        end: slotInfo.end,
-        createdAt: new Date(),
-      };
-      onEventAdd(newEvent);
-    }
-  };
-
-  const handleSelectEvent = (event: CustomEvent) => {
+  const handleSelectEvent = (event: CalendarEventType) => {
     if (onEventSelect) {
       onEventSelect(event);
     }
@@ -101,8 +90,8 @@ const ACalendar: React.FC<CustomCalendarProps> = ({ events = [], onEventAdd, onE
   return (
     <Box
       sx={{
-        height: 'calc(100vh - 200px)', // 전체 높이에서 여유 공간을 뺀 값
-        width: '100%', // maxWidth 대신 width 사용
+        height: 'calc(100vh - 200px)',
+        width: '100%',
         margin: '0 auto',
         padding: '20px',
         '@media (max-width: 1024px)': {
@@ -110,21 +99,19 @@ const ACalendar: React.FC<CustomCalendarProps> = ({ events = [], onEventAdd, onE
         },
       }}
     >
-      <Calendar<CustomEvent>
+      <Calendar<CalendarEventType>
         localizer={localizer}
         events={events}
         startAccessor="start"
         endAccessor="end"
         style={{
           height: '100%',
-          minHeight: '500px', // 최소 높이 설정
+          minHeight: '500px',
         }}
         views={['month']}
         components={{
           toolbar: (toolbarProps) => <CustomToolbar {...toolbarProps} />,
         }}
-        selectable
-        onSelectSlot={handleSelectSlot}
         onSelectEvent={handleSelectEvent}
         date={currentDate}
         onNavigate={handleNavigate}
