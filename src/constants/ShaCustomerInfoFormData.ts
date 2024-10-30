@@ -10,6 +10,7 @@ import { ShaDropdownProps } from '@/components/atom/DropdownBox/ShaDropDown';
 import { ShaOneCheckboxProps } from '@/components/molecules/checkbox/ShaOneCheckBox';
 import { publishedCheckboxData } from './CustomerData';
 
+
 export type CustomerInfoValues = {
   reservationDateTime: Date | null;
   name: string;
