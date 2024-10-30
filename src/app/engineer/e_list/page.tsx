@@ -12,8 +12,9 @@ import axios from 'axios';
 
 export type Engineer = {
   id: number;
+  engineer_id: number;
   name: string;
-  phoneNumber: string;
+  phone_number: string;
   location: string;
   remark: string;
   skills: string[];
@@ -47,7 +48,13 @@ type EngineerCommissionRate = {
 };
 
 type ApiResponse = {
-  engineer: Engineer[];
+  engineer: {
+    id: number;
+    name: string;
+    phoneNumber: string;
+    location: string;
+    remark: string;
+  }[];
   engineerPay: EngineerPay[];
   engineerPayDay: EngineerPayDay[];
   EngineerCommissionRates: EngineerCommissionRate[];
@@ -82,8 +89,9 @@ const Page = () => {
 
           return {
             id: eng.id,
+            engineer_id: eng.id, // id를 engineer_id로도 사용
             name: eng.name,
-            phoneNumber: eng.phoneNumber,
+            phone_number: eng.phoneNumber, // phoneNumber를 phone_number로 변환
             location: eng.location,
             remark: eng.remark,
             skills: [],
@@ -191,7 +199,7 @@ const Page = () => {
         },
       },
       { label: '지급일', value: engineer.payday },
-      { label: '전화번호', value: engineer.phoneNumber },
+      { label: '전화번호', value: engineer.phone_number },
       { label: '주소', value: engineer.location },
       { label: '특이사항', value: engineer.remark },
       {

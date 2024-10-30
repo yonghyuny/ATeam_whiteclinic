@@ -135,9 +135,8 @@ type EngineerInfo = {
   orders: { startTime: string; endTime: string }[];
 };
 
-
 // 추가 타입 (로그인)
-type FormData = {
+type LoginFormData = {
   username: string;
   password: string;
 };

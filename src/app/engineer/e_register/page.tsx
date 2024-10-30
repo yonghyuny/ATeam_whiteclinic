@@ -1,6 +1,5 @@
 'use client';
 
-import Register from '@/constants/delete/Register';
 import ShaRegister from '@/components/molecules/Engineer/ShaRegister';
 import { Box, Container } from '@mui/material';
 import React from 'react';

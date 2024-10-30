@@ -1,13 +1,14 @@
 import { ShaTitledFormControlProps } from '@/components/molecules/Form/ShaTitledFormControl';
 import { ShaFormFieldType } from '@/components/molecules/Form/ShaFormField';
 import { ShaInputProps } from '@/components/atom/Input/ShaInput';
-import { publishedCheckboxData } from './customerData';
+
 import { Payment } from '@/constants/Payment';
 import { Document } from '@/constants/Document';
 import { ShaDateTimePickerProps } from '@/components/molecules/ADateTimePicker/ShaDateTimePicker';
 import { ShaTextareaProps } from '@/components/atom/Input/ShaTextArea';
 import { ShaDropdownProps } from '@/components/atom/DropdownBox/ShaDropDown';
 import { ShaOneCheckboxProps } from '@/components/molecules/checkbox/ShaOneCheckBox';
+import { publishedCheckboxData } from './CustomerData';
 
 export type CustomerInfoValues = {
   reservationDateTime: Date | null;

@@ -12,10 +12,11 @@ import { cn } from '@/lib/utils';
 
 import { Days } from '@/constants/Days';
 import { Document } from '@/constants/Document';
-import { MonthsPlan } from '@/constants/MonthsPlan';
+
 import { Payment } from '@/constants/Payment';
 import { Percentage } from '@/constants/Percentage';
 import { productCategories } from '@/constants/productCategory';
+import { MonthsPlan } from '@/constants/MonthsPlan';
 
 type AllowedObjects =
   | (typeof Days)[number]

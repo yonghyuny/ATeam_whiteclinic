@@ -14,14 +14,16 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import { AlignJustify } from 'lucide-react';
-import CardFilter from '../organism/yh/CardFilter';
+import CardFilter, { EngineerWithDetails } from '../organism/yh/CardFilter';
 
 type Engineer = {
   id: number;
+  engineer_id: number;
   name: string;
-  phoneNumber: string;
+  phone_number: string;
   location: string;
   remark: string;
+  skills: string[];
   commission_rate: number;
   payday: string;
   is_paid: boolean;
@@ -29,7 +31,6 @@ type Engineer = {
     date: string;
     daily_amount: number;
   }[];
-  skills: string[];
 };
 
 type WorkerDrawerProps = {
@@ -49,12 +50,26 @@ const WorkerDrawer = ({
 
   const filteredEngineers = React.useMemo(() => {
     return engineers
-      .map((engineer, index) => [`engineer${index}`, engineer] as [string, Engineer])
+      .map(
+        (engineer, index) =>
+          [
+            `engineer${index}`,
+            {
+              engineer_id: engineer.engineer_id,
+              name: engineer.name,
+              phone_number: engineer.phone_number,
+              location: engineer.location,
+              remark: engineer.remark,
+              skills: engineer.skills,
+              commission_rate: engineer.commission_rate,
+            } as EngineerWithDetails,
+          ] as [string, EngineerWithDetails]
+      )
       .filter(
         ([_, engineer]) =>
           engineer.name.toLowerCase().includes(filter.toLowerCase()) ||
           engineer.location.toLowerCase().includes(filter.toLowerCase()) ||
-          engineer.phoneNumber.includes(filter)
+          engineer.phone_number.includes(filter)
       );
   }, [engineers, filter]);
 
@@ -62,11 +77,14 @@ const WorkerDrawer = ({
     setFilter(event.target.value);
   };
 
-  const handleEngineerSelect = (engineer: Engineer) => {
-    onEngineerSelect({
-      ...engineer,
-      remark: engineer.remark || '', // remark 속성이 없는 경우 빈 문자열로 설정
-    });
+  const handleEngineerSelect = (engineerDetails: EngineerWithDetails) => {
+    // EngineerWithDetails를 Engineer로 변환
+    const selectedEngineer = engineers.find(
+      (eng) => eng.engineer_id === engineerDetails.engineer_id
+    );
+    if (selectedEngineer) {
+      onEngineerSelect(selectedEngineer);
+    }
     onOpenChange(false);
   };
 
