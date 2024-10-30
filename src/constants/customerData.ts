@@ -1,4 +1,3 @@
-
 import { CheckboxProps } from '@/components/atom/CheckBox/ShaCheckBox';
 import { CheckboxTextType } from './textType';
 
