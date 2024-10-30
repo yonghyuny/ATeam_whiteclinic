@@ -8,7 +8,8 @@ import { ShaDateTimePickerProps } from '@/components/molecules/ADateTimePicker/S
 import { ShaTextareaProps } from '@/components/atom/Input/ShaTextArea';
 import { ShaDropdownProps } from '@/components/atom/DropdownBox/ShaDropDown';
 import { ShaOneCheckboxProps } from '@/components/molecules/checkbox/ShaOneCheckBox';
-import { publishedCheckboxData } from './CustomerData';
+import { publishedCheckboxData } from './customerData';
+
 
 
 
