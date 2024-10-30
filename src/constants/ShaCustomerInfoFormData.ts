@@ -8,11 +8,7 @@ import { ShaDateTimePickerProps } from '@/components/molecules/ADateTimePicker/S
 import { ShaTextareaProps } from '@/components/atom/Input/ShaTextArea';
 import { ShaDropdownProps } from '@/components/atom/DropdownBox/ShaDropDown';
 import { ShaOneCheckboxProps } from '@/components/molecules/checkbox/ShaOneCheckBox';
-import { publishedCheckboxData } from './customerData';
-
-
-
-
+import { publishedCheckboxData } from './yh/CustomerData';
 
 export type CustomerInfoValues = {
   reservationDateTime: Date | null;

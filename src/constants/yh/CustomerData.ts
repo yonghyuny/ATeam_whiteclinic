@@ -1,5 +1,6 @@
 import { CheckboxProps } from '@/components/atom/CheckBox/ShaCheckBox';
-import { CheckboxTextType } from './textType';
+import { CheckboxTextType } from '../textType';
+
 
 export const publishedCheckboxData: { [key: string]: CheckboxProps } = {
   published: {
