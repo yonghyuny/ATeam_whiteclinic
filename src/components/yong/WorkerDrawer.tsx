@@ -21,25 +21,26 @@ type Engineer = {
   name: string;
   phoneNumber: string;
   location: string;
-  skills: string[];
+  remark: string;
   commission_rate: number;
   payday: string;
   is_paid: boolean;
-  daily_earnings: Array<{
+  daily_earnings: {
     date: string;
     daily_amount: number;
-  }>;
+  }[];
+  skills: string[];
 };
 
 type WorkerDrawerProps = {
-  engineers: Engineer[]; // 객체 대신 배열로 변경
+  engineers: Engineer[];
   onEngineerSelect: (engineer: Engineer) => void;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 };
 
 const WorkerDrawer = ({
-  engineers = [], // 기본값을 빈 배열로 설정
+  engineers = [],
   onEngineerSelect,
   open,
   onOpenChange,
@@ -62,7 +63,10 @@ const WorkerDrawer = ({
   };
 
   const handleEngineerSelect = (engineer: Engineer) => {
-    onEngineerSelect(engineer);
+    onEngineerSelect({
+      ...engineer,
+      remark: engineer.remark || '', // remark 속성이 없는 경우 빈 문자열로 설정
+    });
     onOpenChange(false);
   };
 

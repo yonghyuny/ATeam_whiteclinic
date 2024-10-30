@@ -10,13 +10,20 @@ import { StyledCalendarContainer } from '@/components/yong/ContainerStyle';
 import api from '@/utils/axios';
 import axios from 'axios';
 
-// API 응답 타입 정의
-type Engineer = {
+export type Engineer = {
   id: number;
   name: string;
   phoneNumber: string;
   location: string;
   remark: string;
+  skills: string[];
+  commission_rate: number;
+  payday: string;
+  is_paid: boolean;
+  daily_earnings: {
+    date: string;
+    daily_amount: number;
+  }[];
 };
 
 type EngineerPay = {
@@ -39,23 +46,6 @@ type EngineerCommissionRate = {
   rateId: number;
 };
 
-// 통합된 기사 정보 타입
-type EngineerWithDetails = {
-  id: number;
-  name: string;
-  phoneNumber: string;
-  location: string;
-  remark: string;
-  commission_rate: number;
-  payday: string;
-  is_paid: boolean;
-  daily_earnings: Array<{
-    date: string;
-    daily_amount: number;
-  }>;
-};
-
-// API 응답 타입
 type ApiResponse = {
   engineer: Engineer[];
   engineerPay: EngineerPay[];
@@ -72,9 +62,9 @@ type FooterItem = {
 };
 
 const Page = () => {
-  const [selectedEngineer, setSelectedEngineer] = useState<EngineerWithDetails | null>(null);
-  const [editedEngineer, setEditedEngineer] = useState<EngineerWithDetails | null>(null);
-  const [engineers, setEngineers] = useState<EngineerWithDetails[]>([]);
+  const [selectedEngineer, setSelectedEngineer] = useState<Engineer | null>(null);
+  const [editedEngineer, setEditedEngineer] = useState<Engineer | null>(null);
+  const [engineers, setEngineers] = useState<Engineer[]>([]);
   const [open, setOpen] = useState(false);
   const [events, setEvents] = useState<CalendarEventType[]>([]);
   const [isEditing, setIsEditing] = useState(false);
@@ -82,54 +72,29 @@ const Page = () => {
   useEffect(() => {
     const fetchEngineers = async () => {
       try {
-        console.log('Fetching engineers...');
         const response = await api.get<ApiResponse>('engineer-info/getAll');
-        console.log('Raw API Response:', response.data);
+        const { engineer, engineerPay, engineerPayDay, EngineerCommissionRates } = response.data;
 
-        const {
-          engineer,
-          engineerPay,
-          engineerPayDay,
-          EngineerCommissionRates
-        } = response.data;
+        const processedEngineers: Engineer[] = engineer.map((eng) => {
+          const payments = engineerPay.filter((pay) => pay.engineerId === eng.id);
+          const payDay = engineerPayDay.find((day) => day.engineerId === eng.id);
+          const commission = EngineerCommissionRates.find((rate) => rate.engineerId === eng.id);
 
-        console.log('Engineer Data:', engineer);
-        console.log('Engineer Pay Data:', engineerPay);
-        console.log('Engineer PayDay Data:', engineerPayDay);
-        console.log('Commission Rates Data:', EngineerCommissionRates);
-
-        const processedEngineers: EngineerWithDetails[] = engineer.map((eng) => {
-          const payments = engineerPay.filter(
-            (pay) => pay.engineerId === eng.id
-          );
-          console.log(`Payments for engineer ${eng.id}:`, payments);
-
-          const payDay = engineerPayDay.find(
-            (day) => day.engineerId === eng.id
-          );
-          console.log(`PayDay for engineer ${eng.id}:`, payDay);
-
-          const commission = EngineerCommissionRates.find(
-            (rate) => rate.engineerId === eng.id
-          );
-          console.log(`Commission for engineer ${eng.id}:`, commission);
-
-          const processed = {
+          return {
             id: eng.id,
             name: eng.name,
             phoneNumber: eng.phoneNumber,
             location: eng.location,
             remark: eng.remark,
+            skills: [],
             commission_rate: commission ? commission.rateId : 50,
             payday: payDay ? payDay.weekdays : '월요일',
             is_paid: payDay ? payDay.is_pay : false,
             daily_earnings: payments.map((pay) => ({
               date: pay.date,
-              daily_amount: pay.daily_amount
-            }))
+              daily_amount: pay.daily_amount,
+            })),
           };
-          console.log(`Processed engineer ${eng.id}:`, processed);
-          return processed;
         });
 
         setEngineers(processedEngineers);
@@ -139,7 +104,7 @@ const Page = () => {
           console.error('Error details:', {
             status: error.response?.status,
             data: error.response?.data,
-            message: error.message
+            message: error.message,
           });
         }
       }
@@ -150,29 +115,25 @@ const Page = () => {
 
   useEffect(() => {
     if (selectedEngineer) {
-      const newEvents: CalendarEventType[] = selectedEngineer.daily_earnings.map((earning) => {
-        const date = new Date(earning.date);
-
-        return {
-          title: `${earning.daily_amount.toLocaleString()}원`,
-          start: date,
-          end: date,
-          allDay: true,
-          amount: earning.daily_amount,
-          user: selectedEngineer.name,
-        };
-      });
+      const newEvents: CalendarEventType[] = selectedEngineer.daily_earnings.map((earning) => ({
+        title: `${earning.daily_amount.toLocaleString()}원`,
+        start: new Date(earning.date),
+        end: new Date(earning.date),
+        allDay: true,
+        amount: earning.daily_amount,
+        user: selectedEngineer.name,
+      }));
       setEvents(newEvents);
       setEditedEngineer(selectedEngineer);
     }
   }, [selectedEngineer]);
 
-  const calculateWageAmount = (engineer: EngineerWithDetails): number => {
+  const calculateWageAmount = (engineer: Engineer): number => {
     const totalWage = engineer.daily_earnings.reduce((sum, dp) => sum + dp.daily_amount, 0);
     return Math.round(totalWage * (engineer.commission_rate / 100));
   };
 
-  const handleWorkerSelect = (engineer: EngineerWithDetails) => {
+  const handleWorkerSelect = (engineer: Engineer) => {
     setSelectedEngineer(engineer);
     setOpen(false);
   };
@@ -193,7 +154,7 @@ const Page = () => {
     setIsEditing(!isEditing);
   };
 
-  const getEditableFooterData = (engineer: EngineerWithDetails): FooterItem[] => {
+  const getEditableFooterData = (engineer: Engineer): FooterItem[] => {
     const totalWage = engineer.daily_earnings.reduce((sum, dp) => sum + dp.daily_amount, 0);
     const wageAmount = calculateWageAmount(engineer);
 
