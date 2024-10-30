@@ -11,6 +11,8 @@ import { ShaOneCheckboxProps } from '@/components/molecules/checkbox/ShaOneCheck
 import { publishedCheckboxData } from './CustomerData';
 
 
+
+
 export type CustomerInfoValues = {
   reservationDateTime: Date | null;
   name: string;
