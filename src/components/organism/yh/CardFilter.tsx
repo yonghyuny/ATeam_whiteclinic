@@ -5,27 +5,22 @@ import ShaInput from '@/components/atom/Input/ShaInput';
 import ACard from '@/components/molecules/Card/ACard';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
-type Engineer = {
-  id: number;
+export type EngineerWithDetails = {
+  engineer_id: number;
   name: string;
-  phoneNumber: string;
+  phone_number: string;
   location: string;
   remark: string;
   skills: string[];
   commission_rate: number;
-  payday: string;
-  is_paid: boolean;
-  daily_earnings: {
-    date: string;
-    daily_amount: number;
-  }[];
+  regular_engineer_id?: number;
 };
 
 type FilterProps = {
-  data: [string, Engineer][];
+  data: [string, EngineerWithDetails][];
   filter: string;
   onFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onItemClick: (item: [string, Engineer]) => void;
+  onItemClick: (item: [string, EngineerWithDetails]) => void;
 };
 
 const CardFilter = ({ data, filter, onFilterChange, onItemClick }: FilterProps) => {
@@ -53,7 +48,7 @@ const CardFilter = ({ data, filter, onFilterChange, onItemClick }: FilterProps) 
             <ACard
               key={entry[0]}
               name={entry[1].name}
-              tel={entry[1].phoneNumber}
+              tel={entry[1].phone_number}
               address={entry[1].location}
               onClick={() => onItemClick(entry)}
             />

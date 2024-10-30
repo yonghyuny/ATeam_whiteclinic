@@ -1,7 +1,7 @@
-import { WorkerInfo, WorkerProps } from '@/constants/Workers';
+'use client';
 import { Box } from '@mui/material';
 import React, { useState } from 'react';
-import CardFilter from '../yh/CardFilter';
+import CardFilter, { EngineerWithDetails } from '../yh/CardFilter';
 import dayjs, { Dayjs } from 'dayjs';
 import { formatDate } from '@/util/dateUtil';
 import ADatePicker from '@/components/atom/Calendar/ADatePicker';
@@ -23,13 +23,17 @@ const dateDisplayStyle = {
   fontWeight: 800,
 };
 
-const ScheduleShowTable = () => {
-  const [selectedWorker, setSelectedWorker] = useState<WorkerProps | null>(null);
+interface ScheduleShowTableProps {
+  engineers: EngineerWithDetails[];
+}
+
+const ScheduleShowTable = ({ engineers }: ScheduleShowTableProps) => {
+  const [selectedWorker, setSelectedWorker] = useState<EngineerWithDetails | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [filter, setFilter] = useState('');
 
-  const handleCardClick = (worker: WorkerProps) => {
-    setSelectedWorker(worker);
+  const handleCardClick = ([_, engineer]: [string, EngineerWithDetails]) => {
+    setSelectedWorker(engineer);
   };
 
   const handleDateChange = (newValue: Dayjs | null) => {
@@ -45,9 +49,18 @@ const ScheduleShowTable = () => {
     ? selectedDate.toLocaleDateString('ko-KR', { weekday: 'long' })
     : '';
 
-  const filteredWorkers = Object.entries(WorkerInfo).filter(
-    ([_, worker]) =>
-      worker.name.toLowerCase().includes(filter.toLowerCase()) || worker.available.includes(filter)
+  const engineerEntries: [string, EngineerWithDetails][] = engineers.map((engineer) => [
+    engineer.engineer_id.toString(),
+    engineer,
+  ]);
+
+  const filteredWorkers = engineerEntries.filter(
+    ([_, engineer]) =>
+      engineer.name.toLowerCase().includes(filter.toLowerCase()) ||
+      engineer.phone_number.includes(filter) ||
+      engineer.location.toLowerCase().includes(filter.toLowerCase()) ||
+      engineer.remark.toLowerCase().includes(filter.toLowerCase()) ||
+      engineer.skills.some((skill) => skill.toLowerCase().includes(filter.toLowerCase()))
   );
 
   const cardFilterProps = {
