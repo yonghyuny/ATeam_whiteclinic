@@ -1,4 +1,5 @@
-import { ApiResponse, Engineer, CalendarEventType } from '@/constants/yh/EngineerTypeData';
+import { CalendarEventType } from '@/components/atom/Calendar/ACalendar';
+import { ApiResponse, Engineer} from '@/constants/yh/EngineerTypeData';
 
 export const processEngineerData = (
   engineer: any,
