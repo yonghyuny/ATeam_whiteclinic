@@ -1,23 +1,12 @@
-import { Box } from '@mui/material';
 import { ReactNode } from 'react';
 
-type CenterLayoutProps = {
+interface CenteredLayoutProps {
   children: ReactNode;
-};
+  className?: string;
+}
 
-const CenteredLayout = ({ children }: CenterLayoutProps) => {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      {children}
-    </Box>
-  );
+const CenteredLayout = ({ children, className = '' }: CenteredLayoutProps) => {
+  return <div className={`flex flex-col items-center justify-center ${className}`}>{children}</div>;
 };
 
 export default CenteredLayout;

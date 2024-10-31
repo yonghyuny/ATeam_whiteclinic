@@ -9,6 +9,7 @@ import { ShaTextareaProps } from '@/components/atom/Input/ShaTextArea';
 import { ShaDropdownProps } from '@/components/atom/DropdownBox/ShaDropDown';
 import { ShaOneCheckboxProps } from '@/components/molecules/checkbox/ShaOneCheckBox';
 import { publishedCheckboxData } from './yh/CustomerData';
+import { ShaDiscountCheckboxProps } from '@/components/molecules/Customer/ShaDiscountCheckBox';
 
 export type CustomerInfoValues = {
   reservationDateTime: Date | null;
@@ -19,8 +20,9 @@ export type CustomerInfoValues = {
   payment: string;
   document: string;
   published: string;
+  isDepositPaid: boolean;
+  depositAmount: number;
 };
-
 export const ShaCustomerInfoFormData = (
   formValues: CustomerInfoValues,
   handleFieldChange: (fieldName: keyof CustomerInfoValues, value: any) => void,
@@ -125,6 +127,31 @@ export const ShaCustomerInfoFormData = (
     },
   },
   {
+    titleprops: { text: '계약금' },
+    formfieldprops: {
+      fields: [
+        {
+          formfieldtype: 'ShaDiscountCheckbox' as ShaFormFieldType,
+          prevprops: {
+            checkboxProps: {
+              checked: formValues.isDepositPaid,
+              onCheckedChange: (checked: boolean) => handleFieldChange('isDepositPaid', checked),
+              label: '계약금 입금완료',
+            },
+            numericInputProps: {
+              value: formValues.depositAmount.toString(),
+              onChange: (value: string) => handleFieldChange('depositAmount', Number(value)),
+              max: 1000000,
+              size: 'medium',
+              placeholder: '계약금 입금액',
+              unit: '원',
+            },
+          } as ShaDiscountCheckboxProps,
+        },
+      ],
+    },
+  },
+  {
     titleprops: {
       text: '결제방식',
     },
@@ -174,7 +201,7 @@ export const ShaCustomerInfoFormData = (
             checkboxes: publishedCheckboxData,
             value: formValues.published,
             onChange: (value: string) => handleFieldChange('published', value),
-            className: 'mt-2',
+            className: 'start',
           } as ShaOneCheckboxProps,
         },
       ],
