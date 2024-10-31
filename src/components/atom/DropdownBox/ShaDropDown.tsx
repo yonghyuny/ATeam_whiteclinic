@@ -65,7 +65,7 @@ const ShaDropdown: React.FC<ShaDropdownProps> = ({
       >
         <SelectValue placeholder={label} />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="max-h-max overflow-hidden">
         {options.map((option) => (
           <SelectItem key={String(option.value)} value={String(option.value)}>
             {String(option.text)}

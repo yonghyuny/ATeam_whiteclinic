@@ -1,19 +1,17 @@
 'use client';
 
-import React from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
+import React, { useState } from 'react';
+import { Calendar, momentLocalizer, Event } from 'react-big-calendar';
 import moment from 'moment';
+import 'moment/locale/ko';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { Box, IconButton, Typography } from '@mui/material';
 import { sampleSalesData } from '@/constants/MainCalendarSalesData';
-import ACalendar from './ACalendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { 
-  TrendingUp, 
-  ShoppingCart, 
-  ArrowUpRight, 
-  CalendarDays,
-  CreditCard
-} from 'lucide-react';
+import { TrendingUp, ShoppingCart, ArrowUpRight, CalendarDays, CreditCard } from 'lucide-react';
+
+moment.locale('ko');
+const localizer = momentLocalizer(moment);
 
 interface SalesData {
   date: string;
@@ -21,13 +19,30 @@ interface SalesData {
   dailySales: number;
 }
 
-const StatCard = ({ 
-  title, 
-  value, 
-  subtitle, 
-  icon, 
-  trend 
-}: { 
+interface CalendarEventType extends Event {
+  title: string;
+  start: Date;
+  end: Date;
+  resource?: {
+    orders: number;
+    sales: number;
+  };
+}
+
+interface WeeklySummary {
+  startDate: string;
+  endDate: string;
+  totalSales: number;
+  totalOrders: number;
+}
+
+const StatCard = ({
+  title,
+  value,
+  subtitle,
+  icon,
+  trend,
+}: {
   title: string;
   value: string;
   subtitle?: string;
@@ -50,38 +65,92 @@ const StatCard = ({
       <div className="mt-4">
         <p className="text-sm font-medium text-gray-500">{title}</p>
         <h3 className="mt-2 text-2xl font-bold text-gray-900">{value}</h3>
-        {subtitle && (
-          <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
-        )}
+        {subtitle && <p className="mt-1 text-sm text-gray-500">{subtitle}</p>}
       </div>
     </CardContent>
   </Card>
 );
 
-const SalesDashboard: React.FC = () => {
-  // 더미 데이터 변환: 캘린더 이벤트 형식으로 변환
-  const events = sampleSalesData.map((data) => ({
-    title: `총 주문: ${data.totalOrders}, 일일 매출: ${data.dailySales.toLocaleString()}원`,
-    start: new Date(data.date),
-    end: new Date(data.date),
-  }));
+const WeeklySummaryCard = ({ summary }: { summary: WeeklySummary }) => (
+  <div className="border-b border-gray-200 py-4">
+    <div className="text-sm text-gray-500 mb-2">
+      {summary.startDate} ~ {summary.endDate}
+    </div>
+    <div className="grid grid-cols-2 gap-4">
+      <div>
+        <div className="text-sm font-medium text-gray-500">주문</div>
+        <div className="text-lg font-bold text-gray-900">
+          {summary.totalOrders.toLocaleString()}건
+        </div>
+      </div>
+      <div>
+        <div className="text-sm font-medium text-gray-500">매출</div>
+        <div className="text-lg font-bold text-blue-600">
+          ₩{summary.totalSales.toLocaleString()}
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
-  // 주간 및 월간 매출 계산 함수
+const SalesDashboard: React.FC = () => {
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  const events: CalendarEventType[] = sampleSalesData.map((data) => {
+    const date = moment(data.date).toDate();
+    return {
+      title: `${data.totalOrders}건 / ₩${data.dailySales.toLocaleString()}`,
+      start: date,
+      end: date,
+      allDay: true,
+      resource: {
+        orders: data.totalOrders,
+        sales: data.dailySales,
+      },
+    };
+  });
+
+  // 주간 데이터 계산 함수
+  const calculateWeeklySummaries = (salesData: SalesData[]): WeeklySummary[] => {
+    const weeklySummaries: WeeklySummary[] = [];
+    const currentMonth = moment(currentDate).month();
+
+    // 현재 월의 시작일
+    let startOfMonth = moment(currentDate).startOf('month');
+
+    // 각 주의 데이터 계산
+    while (startOfMonth.month() === currentMonth) {
+      const endOfWeek = moment(startOfMonth).endOf('week');
+      const weekData = salesData.filter((data) => {
+        const date = moment(data.date);
+        return date.isSameOrAfter(startOfMonth, 'day') && date.isSameOrBefore(endOfWeek, 'day');
+      });
+
+      if (weekData.length > 0) {
+        weeklySummaries.push({
+          startDate: startOfMonth.format('M/D'),
+          endDate: endOfWeek.format('M/D'),
+          totalSales: weekData.reduce((sum, data) => sum + data.dailySales, 0),
+          totalOrders: weekData.reduce((sum, data) => sum + data.totalOrders, 0),
+        });
+      }
+
+      startOfMonth = endOfWeek.add(1, 'day');
+    }
+
+    return weeklySummaries;
+  };
+
   const calculateWeeklyMonthlySales = (salesData: SalesData[]) => {
     const today = new Date();
-    
-    // 최근 7일 데이터
+
     const weeklyData = salesData.slice(-7);
-    // 이번 달 데이터
-    const monthlyData = salesData.filter(data => 
-      new Date(data.date).getMonth() === today.getMonth()
+    const monthlyData = salesData.filter(
+      (data) => new Date(data.date).getMonth() === today.getMonth()
     );
 
-    // 주간 매출 및 주문 수 계산
     const totalWeeklySales = weeklyData.reduce((acc, data) => acc + data.dailySales, 0);
     const totalWeeklyOrders = weeklyData.reduce((acc, data) => acc + data.totalOrders, 0);
-    
-    // 월간 매출 및 주문 수 계산
     const totalMonthlySales = monthlyData.reduce((acc, data) => acc + data.dailySales, 0);
     const totalMonthlyOrders = monthlyData.reduce((acc, data) => acc + data.totalOrders, 0);
 
@@ -93,58 +162,82 @@ const SalesDashboard: React.FC = () => {
     };
   };
 
-  const { 
-    totalWeeklySales, 
-    totalWeeklyOrders, 
-    totalMonthlySales, 
-    totalMonthlyOrders 
-  } = calculateWeeklyMonthlySales(sampleSalesData);
+  const { totalWeeklySales, totalWeeklyOrders, totalMonthlySales, totalMonthlyOrders } =
+    calculateWeeklyMonthlySales(sampleSalesData);
+
+  const weeklySummaries = calculateWeeklySummaries(sampleSalesData);
+
+  const handleSelectEvent = (event: CalendarEventType) => {
+    console.log('Selected event:', event);
+  };
 
   return (
-    <div className="max-w-full m-auto"> {/* 최대 너비 조정 */}
-      <div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          {/* 주간 매출 카드 */}
-          <StatCard
-            title="주간 총 매출"
-            value={`￦${totalWeeklySales.toLocaleString()}`}
-            icon={<TrendingUp className="w-6 h-6 text-blue-600" />}
-            trend={12}
-          />
-          
-          {/* 주간 주문 카드 */}
-          <StatCard
-            title="주간 총 주문"
-            value={totalWeeklyOrders.toLocaleString()}
-            subtitle="지난 7일 동안의 총 주문 수"
-            icon={<ShoppingCart className="w-6 h-6 text-blue-600" />}
-          />
-          
-          {/* 월간 매출 카드 */}
-          <StatCard
-            title="월간 총 매출"
-            value={`￦${totalMonthlySales.toLocaleString()}`}
-            icon={<CreditCard className="w-6 h-6 text-blue-600" />}
-            trend={8}
-          />
-          
-          {/* 월간 주문 카드 */}
-          <StatCard
-            title="월간 총 주문"
-            value={totalMonthlyOrders.toLocaleString()}
-            subtitle="이번 달의 총 주문 수"
-            icon={<CalendarDays className="w-6 h-6 text-blue-600" />}
-          />
-        </div>
+    <div className="max-w-full m-auto pl-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <StatCard
+          title="주간 총 매출"
+          value={`￦${totalWeeklySales.toLocaleString()}`}
+          icon={<TrendingUp className="w-6 h-6 text-blue-600" />}
+          // trend={12}
+        />
+        <StatCard
+          title="주간 총 주문"
+          value={totalWeeklyOrders.toLocaleString()}
+          subtitle="지난 7일 동안의 총 주문 수"
+          icon={<ShoppingCart className="w-6 h-6 text-blue-600" />}
+        />
+        <StatCard
+          title="월간 총 매출"
+          value={`￦${totalMonthlySales.toLocaleString()}`}
+          icon={<CreditCard className="w-6 h-6 text-blue-600" />}
+          // trend={8}
+        />
+        <StatCard
+          title="월간 총 주문"
+          value={totalMonthlyOrders.toLocaleString()}
+          subtitle="이번 달의 총 주문 수"
+          icon={<CalendarDays className="w-6 h-6 text-blue-600" />}
+        />
       </div>
 
-      {/* 캘린더 섹션 */}
-      
-          <div className="h-[600px]">
-            <ACalendar events={events} />
-          </div>
-        
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="lg:col-span-3 h-[900px] bg-white p-4 rounded-lg ">
+          <Calendar
+            localizer={localizer}
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            style={{ height: '100%' }}
+            onSelectEvent={handleSelectEvent}
+            date={currentDate}
+            onNavigate={(date) => setCurrentDate(date)}
+            views={['month']}
+            messages={{
+              next: '다음',
+              previous: '이전',
+              today: '오늘',
+              month: '월',
+              week: '주',
+              day: '일',
+            }}
+          />
+        </div>
+
+        <div className="lg:col-span-1 bg-white rounded-lg pt-16 ">
+          <Card>
+            <CardHeader>
+              <CardTitle>주간 매출 요약</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {weeklySummaries.map((summary, index) => (
+                  <WeeklySummaryCard key={index} summary={summary} />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 };

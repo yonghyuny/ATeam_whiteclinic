@@ -21,7 +21,8 @@ export type airConditionerCategory =
   | '원형 덕트'
   | '메인 덕트'
   | '일반 실외기'
-  | '대형 실외기';
+  | '대형 실외기'
+  | '기타';
 export type washingMachineCategory =
   | '통돌이 5~17kg'
   | '통돌이 18~20kg'
@@ -33,7 +34,8 @@ export type washingMachineCategory =
   | '건조기'
   | '트윈워시'
   | '통돌이형 아기사랑 세탁기'
-  | '드럼형 아기사랑 세탁기';
+  | '드럼형 아기사랑 세탁기'
+  | '기타';
 
 // 텍스트 전체
 export type TextType =

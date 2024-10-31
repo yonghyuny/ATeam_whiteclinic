@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
-import { Pencil, ChevronUp, ChevronDown } from 'lucide-react';
+import { ChevronUp, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export type ShaNumericInputProps = {
@@ -21,8 +21,8 @@ export type ShaNumericInputProps = {
   error?: string;
   showError?: boolean;
   unit?: '원' | '대';
-  showSpinner?: boolean; // 새로 추가된 prop
-  step?: number; // 새로 추가된 prop - 증감 단위
+  showSpinner?: boolean;
+  step?: number;
 };
 
 const formatCurrency = (value: string) => {
@@ -42,7 +42,7 @@ const ShaNumericInput = ({
   placeholder = '0',
   className,
   size = 'medium',
-  disabled: initialDisabled = false,
+  disabled = false, // 초기값 제거하고 prop으로 직접 사용
   min = 0,
   max,
   required = false,
@@ -52,7 +52,6 @@ const ShaNumericInput = ({
   showSpinner = false,
   step = 1,
 }: ShaNumericInputProps) => {
-  const [isDisabled, setIsDisabled] = useState(initialDisabled);
   const [displayValue, setDisplayValue] = useState(formatCurrency(value));
 
   useEffect(() => {
@@ -60,6 +59,8 @@ const ShaNumericInput = ({
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (disabled) return; // disabled 상태 체크
+
     let newValue = unformatCurrency(e.target.value);
     newValue = newValue.replace(/[^\d]/g, '');
 
@@ -84,6 +85,8 @@ const ShaNumericInput = ({
   };
 
   const handleIncrement = () => {
+    if (disabled) return;
+
     const currentValue = Number(unformatCurrency(displayValue)) || 0;
     const newValue = currentValue + step;
     if (max === undefined || newValue <= max) {
@@ -93,6 +96,8 @@ const ShaNumericInput = ({
   };
 
   const handleDecrement = () => {
+    if (disabled) return;
+
     const currentValue = Number(unformatCurrency(displayValue)) || 0;
     const newValue = currentValue - step;
     if (newValue >= min) {
@@ -125,10 +130,11 @@ const ShaNumericInput = ({
             onChange={handleChange}
             placeholder={placeholder}
             type="text"
-            disabled={isDisabled}
+            disabled={disabled}
             className={cn(
               'pr-8',
-              showErrorState && 'border-destructive focus-visible:ring-destructive'
+              showErrorState && 'border-destructive focus-visible:ring-destructive',
+              disabled && 'opacity-50 cursor-not-allowed'
             )}
           />
           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
@@ -145,7 +151,7 @@ const ShaNumericInput = ({
               className="h-5 w-7 rounded-b-none border-b-0"
               onClick={handleIncrement}
               disabled={
-                isDisabled || (max !== undefined && Number(unformatCurrency(displayValue)) >= max)
+                disabled || (max !== undefined && Number(unformatCurrency(displayValue)) >= max)
               }
             >
               <ChevronUp className="h-3 w-3" />
@@ -156,22 +162,12 @@ const ShaNumericInput = ({
               size="icon"
               className="h-5 w-7 rounded-t-none"
               onClick={handleDecrement}
-              disabled={isDisabled || Number(unformatCurrency(displayValue)) <= min}
+              disabled={disabled || Number(unformatCurrency(displayValue)) <= min}
             >
               <ChevronDown className="h-3 w-3" />
             </Button>
           </div>
         )}
-
-        <Button
-          type="button"
-          variant="outline"
-          size="icon"
-          className="h-10 w-10"
-          onClick={() => setIsDisabled(!isDisabled)}
-        >
-          <Pencil className="h-4 w-4" />
-        </Button>
       </div>
 
       {showErrorState && error && <p className="text-xs text-destructive">{error}</p>}

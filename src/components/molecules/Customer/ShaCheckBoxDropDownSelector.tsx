@@ -39,7 +39,10 @@ const ShaCheckboxDropdownSelector = ({
       }))
     : [];
 
-  const needsCustomInput = selectedDropdownValue === '스탠드' || selectedDropdownValue === '투인원';
+  const needsCustomInput =
+    selectedDropdownValue === '스탠드' ||
+    selectedDropdownValue === '투인원' ||
+    selectedDropdownValue === '기타';
 
   return (
     <div className="flex items-center gap-4">
@@ -48,6 +51,7 @@ const ShaCheckboxDropdownSelector = ({
         value={selectedCategory}
         onChange={handleCheckboxChange}
       />
+
       <div className="flex flex-col gap-2">
         {selectedCategory && (
           <ShaDropdown
@@ -55,7 +59,8 @@ const ShaCheckboxDropdownSelector = ({
             label={label}
             value={selectedDropdownValue}
             options={dropdownOptions}
-            width="large"
+            width="medium"
+            
             onChange={handleDropdownChange}
           />
         )}

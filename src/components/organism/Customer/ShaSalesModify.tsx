@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { productCategories } from '@/constants/productCategory';
 import ShaInfoForm from '@/components/molecules/Form/ShaInfoForm';
 import { ShaSalesInfoFormData } from '@/constants/ShaSalesInfoFormData';
 import ShaTwoButton from '@/components/molecules/Button/ShaTwoButton';
+import { productCategories } from '@/constants/productCategory';
+import { Loader2 } from 'lucide-react';
 
 type ProductCategoryKey = keyof typeof productCategories;
 
@@ -21,7 +22,21 @@ export type SalesFormData = {
   isFinalPriceManual: boolean;
 };
 
-const ShaSalesInfo = () => {
+// 더미 데이터
+const salesDummyData: SalesFormData = {
+  selectedCategory: 'airConditioner',
+  selectedDropdownValue: '스탠드형',
+  itemCount: 2,
+  discountAmount: 10000,
+  finalPrice: 190000,
+  uniqueDetails: '2층 설치, 사다리 필요',
+  customProduct: '',
+  isDiscountApplied: true,
+  isFinalPriceManual: true,
+};
+
+const SalesModify = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [formValues, setFormValues] = useState<SalesFormData>({
     selectedCategory: '',
     selectedDropdownValue: '',
@@ -33,8 +48,27 @@ const ShaSalesInfo = () => {
     isDiscountApplied: false,
     isFinalPriceManual: false,
   });
-
   const [isSubmitAttempted, setIsSubmitAttempted] = useState(false);
+
+  // 등록 버튼 비활성화 조건 추가
+  const isRegisterButtonDisabled =
+    !formValues.selectedCategory || !formValues.selectedDropdownValue || formValues.finalPrice <= 0;
+
+  // 초기 데이터 로드
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        setFormValues(salesDummyData);
+      } catch (error) {
+        console.error('데이터 로드 실패:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
 
   const calculateFinalPrice = (data: SalesFormData): number => {
     const { discountAmount, isDiscountApplied, isFinalPriceManual, finalPrice } = data;
@@ -146,7 +180,6 @@ const ShaSalesInfo = () => {
       customProduct: value,
     }));
   };
-
   const resetForm = () => {
     setFormValues({
       selectedCategory: '',
@@ -161,31 +194,42 @@ const ShaSalesInfo = () => {
     });
     setIsSubmitAttempted(false);
   };
-
-  const isRegisterButtonDisabled =
-    !formValues.selectedCategory || !formValues.selectedDropdownValue || formValues.finalPrice <= 0;
-
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsSubmitAttempted(true);
     if (!isRegisterButtonDisabled) {
-      console.log('등록된 정보:', {
-        세척품목: formValues.selectedCategory,
-        카테고리: formValues.selectedDropdownValue,
-        세척대수: formValues.itemCount,
-        할인적용여부: formValues.isDiscountApplied,
-        할인금액: formValues.discountAmount,
-        최종금액: formValues.finalPrice,
-        특이사항: formValues.uniqueDetails,
-        에어컨스탠드: formValues.customProduct,
-      });
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        console.log('수정된 정보:', {
+          세척품목: formValues.selectedCategory,
+          카테고리: formValues.selectedDropdownValue,
+          세척대수: formValues.itemCount,
+          할인적용여부: formValues.isDiscountApplied,
+          할인금액: formValues.discountAmount,
+          최종금액: formValues.finalPrice,
+          특이사항: formValues.uniqueDetails,
+          에어컨스탠드: formValues.customProduct,
+        });
+        // 성공 시 페이지 이동
+        window.history.back();
+      } catch (error) {
+        console.error('수정 실패:', error);
+      }
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-12 px-4">
       <Card className="w-full max-w-5xl shadow-sm">
         <CardHeader className="border-b">
-          <CardTitle className="text-2xl font-semibold">세척 정보 등록</CardTitle>
+          <CardTitle className="text-2xl font-semibold">세척 정보 수정</CardTitle>
         </CardHeader>
 
         <CardContent className="pt-6 px-6">
@@ -209,12 +253,12 @@ const ShaSalesInfo = () => {
           <ShaTwoButton
             leftButton={{
               text: '취소',
-              onClick: resetForm,
+              onClick: () => window.history.back(),
               size: 'lg',
               variant: 'outline',
             }}
             rightButton={{
-              text: '등록',
+              text: '수정',
               onClick: handleSubmit,
               size: 'lg',
               disabled: isRegisterButtonDisabled,
@@ -226,4 +270,4 @@ const ShaSalesInfo = () => {
   );
 };
 
-export default ShaSalesInfo;
+export default SalesModify;

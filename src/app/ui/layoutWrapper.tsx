@@ -18,12 +18,10 @@ const LayoutWrapper = ({ children }: LayoutWrapperProps) => {
           'ml-16 lg:ml-64',
           'p-8',
           'transition-all duration-300'
-          // overflow-auto 제거
         )}
       >
         <div className="w-full">
           {' '}
-          {/* max-w-7xl 제거 */}
           {children}
         </div>
       </main>
