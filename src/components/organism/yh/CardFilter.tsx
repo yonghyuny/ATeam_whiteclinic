@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ShaInput from '@/components/atom/Input/ShaInput';
-import ACard from '@/components/molecules/Card/ACard';
+import ACard from '@/components/molecules/Card/ACards';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 export type EngineerWithDetails = {

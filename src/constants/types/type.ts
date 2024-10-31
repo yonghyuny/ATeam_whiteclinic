@@ -1,5 +1,5 @@
 // 엔지니어 관련 타입
-type Engineer = {
+export type Engineer = {
   id: number;
   name: string;
   phoneNumber: string;
@@ -12,36 +12,37 @@ type Engineer = {
     date: string;
     daily_amount: number;
   }[];
+  skills: string[];
 };
 
-type EngineerPay = {
+export type EngineerPay = {
   id: number;
   engineerId: number;
   date: string;
   daily_amount: number;
 };
 
-type EngineerPayDay = {
+export type EngineerPayDay = {
   id: number;
   engineerId: number;
   weekdays: string;
   is_pay: boolean;
 };
 
-type EngineerCommissionRate = {
+export type EngineerCommissionRate = {
   id: number;
   engineerId: number;
   rateId: number;
 };
 
-type ApiResponse = {
+export type ApiResponse = {
   engineer: Engineer[];
   engineerPay: EngineerPay[];
   engineerPayDay: EngineerPayDay[];
   EngineerCommissionRates: EngineerCommissionRate[];
 };
 
-type FooterItem = {
+export type FooterItem = {
   label: string;
   value: string | number | boolean;
   isEditable?: boolean;
@@ -50,7 +51,7 @@ type FooterItem = {
 };
 
 // 고객 관련 타입
-type CustomerProps = {
+export type CustomerProps = {
   name: string;
   tel: string;
   address: string;
@@ -61,7 +62,7 @@ type CustomerProps = {
   bill: boolean;
 };
 
-type CustomerInfoValues = {
+export type CustomerInfoValues = {
   reservationDateTime: Date | null;
   name: string;
   phoneNumber: string;
@@ -72,7 +73,7 @@ type CustomerInfoValues = {
   payment: number;
 };
 
-type Order = CustomerInfoValues & {
+export type Order = CustomerInfoValues & {
   orderId: number;
   startTime: string;
   endTime: string;
@@ -83,7 +84,7 @@ type Order = CustomerInfoValues & {
 };
 
 // 기타 타입
-type EngineerFormValues = {
+export type EngineerFormValues = {
   name: string;
   phoneNumber: string;
   residenceArea: string;
@@ -96,7 +97,7 @@ type EngineerFormValues = {
   regularHoliday: string[];
 };
 
-type SalesFormData = {
+export type SalesFormData = {
   itemCount: number;
   discountAmount: number;
   finalPrice: number;
@@ -107,14 +108,14 @@ type SalesFormData = {
   isDiscountApplied: boolean;
 };
 
-type ShaScheduleResFormValues = {
+export type ShaScheduleResFormValues = {
   reservationDateTime: Date | null;
   customerName: string;
   selectedOrder: string;
   engineerName: string;
 };
 
-type OrderInfo = {
+export type OrderInfo = {
   id: string;
   name: string;
   phoneNumber: string;
@@ -125,7 +126,7 @@ type OrderInfo = {
   engineerId?: string | null;
 };
 
-type EngineerInfo = {
+export type EngineerInfo = {
   id: string;
   name: string;
   phoneNumber: string;
@@ -136,7 +137,7 @@ type EngineerInfo = {
 };
 
 // 추가 타입 (로그인)
-type LoginFormData = {
+export type LoginFormData = {
   username: string;
   password: string;
 };
@@ -160,19 +161,4 @@ type ShaScheduleResEngineer = {
   isHoliday: boolean;
   availability: boolean;
   orders: { id: string; startTime: string; endTime: string }[];
-};
-
-type WorkerDrawerEngineer = {
-  id: number;
-  name: string;
-  phoneNumber: string;
-  location: string;
-  skills: string[];
-  commission_rate: number;
-  payday: string;
-  is_paid: boolean;
-  daily_earnings: {
-    date: string;
-    daily_amount: number;
-  }[];
 };

@@ -2,19 +2,9 @@
 
 import React from 'react';
 import ShaText from '@/components/atom/Text/ShaText';
+import { AFooterProps } from '@/constants/yh/EngineerTypeData';
 
-export type FooterItem = {
-  label: string;
-  value: string | number | boolean;
-  renderValue?: (value: string | number | boolean) => React.ReactNode;
-  isEditable?: boolean;
-  onValueChange?: (value: string) => void;
-};
 
-type AFooterProps = {
-  data: FooterItem[];
-  isEditing: boolean;
-};
 
 const AFooter = ({ data, isEditing }: AFooterProps) => {
   return (
