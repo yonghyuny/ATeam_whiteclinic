@@ -83,13 +83,29 @@ export const ShaSalesInfoFormData = ({
               } as ShaOneCheckboxProps,
               dropdownprops: {
                 label: '카테고리 선택',
-                width: 'medium',
+                width: 'small',
                 value: selectedDropdownValue,
                 onChange: (value: string) => onDropdownChange(value),
               } as ShaDropdownProps,
               customInputValue: customProduct,
               onProductChange: onCustomProductChange,
             } as ShaCheckboxDropdownSelectorProps,
+          },
+        ],
+      },
+    },
+    {
+      titleprops: { text: '세척금액' },
+      formfieldprops: {
+        fields: [
+          {
+            formfieldtype: 'ShaNumericInput' as ShaFormFieldType,
+            prevprops: {
+              value: finalPrice.toString(),
+              onChange: onFinalPriceChange,
+              size: 'medium',
+              placeholder: '세척금액을 입력하세요',
+            } as ShaNumericInputProps,
           },
         ],
       },
@@ -130,27 +146,11 @@ export const ShaSalesInfoFormData = ({
               numericInputProps: {
                 value: discountAmount.toString(),
                 onChange: onDiscountChange,
-                max: 100000,
+                max: 1000000,
                 size: 'medium',
                 placeholder: '할인금액',
               },
             } as ShaDiscountCheckboxProps,
-          },
-        ],
-      },
-    },
-    {
-      titleprops: { text: '세척금액' },
-      formfieldprops: {
-        fields: [
-          {
-            formfieldtype: 'ShaNumericInput' as ShaFormFieldType,
-            prevprops: {
-              value: finalPrice.toString(),
-              onChange: onFinalPriceChange,
-              size: 'medium',
-              placeholder: '세척금액을 입력하세요',
-            } as ShaNumericInputProps,
           },
         ],
       },

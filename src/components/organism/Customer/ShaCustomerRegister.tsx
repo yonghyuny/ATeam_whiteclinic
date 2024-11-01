@@ -15,6 +15,8 @@ export type CustomerInfoValues = {
   document: string;
   published: string;
   payment: string;
+  isDepositPaid: boolean; // 추가
+  depositAmount: number; // 추가
 };
 
 type CustomerInfoProps = {
@@ -31,6 +33,8 @@ const ShaCustomerInfo = ({ onRegister }: CustomerInfoProps) => {
     document: '',
     published: '',
     payment: '',
+    isDepositPaid: false, // 초기값 추가
+    depositAmount: 0, // 초기값 추가
   });
 
   const [isSubmitAttempted, setIsSubmitAttempted] = useState(false);
@@ -46,6 +50,8 @@ const ShaCustomerInfo = ({ onRegister }: CustomerInfoProps) => {
       document: '',
       published: '',
       payment: '',
+      isDepositPaid: false, // 리셋 시 초기화
+      depositAmount: 0, // 리셋 시 초기화
     });
     setIsSubmitAttempted(false);
     setResetCounter((prev) => prev + 1);
@@ -55,6 +61,8 @@ const ShaCustomerInfo = ({ onRegister }: CustomerInfoProps) => {
     setFormValues((prev) => ({
       ...prev,
       [fieldName]: value,
+      // 계약금 체크박스가 해제되면 금액도 0으로 초기화
+      ...(fieldName === 'isDepositPaid' && !value ? { depositAmount: 0 } : {}),
     }));
   };
 
@@ -74,7 +82,11 @@ const ShaCustomerInfo = ({ onRegister }: CustomerInfoProps) => {
   const handleSubmit = () => {
     setIsSubmitAttempted(true);
     if (isFormValid()) {
-      console.log('등록된 데이터:', formValues);
+      console.log('등록된 데이터:', {
+        ...formValues,
+        계약금입금여부: formValues.isDepositPaid,
+        계약금액: formValues.depositAmount,
+      });
       onRegister();
     }
   };
