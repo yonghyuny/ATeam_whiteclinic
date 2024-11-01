@@ -1,4 +1,4 @@
-import { productCategories } from './productCategory';
+import { productCategories } from '../productCategory';
 
 export type EngineerFormValues = {
   phoneNumber: string;
@@ -19,7 +19,7 @@ export type Engineer = EngineerFormValues & {
 
 export type CustomerInfoValues = {
   reservationDateTime: Date | null;
-  name: string;
+  customerName: string;
   phoneNumber: string;
   address: string;
   uniqueDetails: string;
@@ -30,6 +30,7 @@ export type CustomerInfoValues = {
 
 // 스케쥴용 Order 타입 정의
 export type Order = CustomerInfoValues & {
+  customerId: number;
   orderId: number;
   startTime: string;
   endTime: string;

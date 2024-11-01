@@ -1,9 +1,7 @@
-import { productCategories } from './productCategory';
-
 // 스케쥴 등록에 사용할 Order와 Engineer에 대한 더미 데이터
 export const orderData = [
   {
-    id: 'order1',
+    id: '1',
     details: 'Order 1: Installation at Client A',
     startTime: new Date('2024-10-23T09:00:00').toISOString(), // ISO 문자열로 변환
     endTime: new Date('2024-10-23T11:00:00').toISOString(), // ISO 문자열로 변환
@@ -18,7 +16,7 @@ export const orderData = [
     payment: 'Credit Card',
   },
   {
-    id: 'order2',
+    id: '2',
     details: 'Order 2: Maintenance at Client B',
     startTime: new Date('2024-10-23T13:00:00').toISOString(), // ISO 문자열로 변환
     endTime: new Date('2024-10-23T15:00:00').toISOString(), // ISO 문자열로 변환
@@ -33,11 +31,11 @@ export const orderData = [
     payment: 'Cash',
   },
   {
-    id: 'order3',
+    id: '3',
     details: 'Order 3: Repair at Client C',
     startTime: new Date('2024-10-23T10:00:00').toISOString(), // ISO 문자열로 변환
     endTime: new Date('2024-10-23T12:00:00').toISOString(), // ISO 문자열로 변환
-    engineerId: 'eng1',
+    engineerId: 1,
     reservationDateTime: new Date('2024-10-23').toISOString(), // ISO 문자열로 변환
     name: 'Client C',
     phoneNumber: '010-3456-7890',
@@ -51,7 +49,7 @@ export const orderData = [
 
 export const engineerData = [
   {
-    id: 'eng1',
+    id: '1',
     name: 'Engineer A',
     phoneNumber: '010-1111-2222',
     residenceArea: 'Area A',
@@ -66,14 +64,14 @@ export const engineerData = [
     availability: true,
     orders: [
       {
-        id: 'order3',
+        id: '3',
         startTime: new Date('2024-10-23T10:00:00').toISOString(), // ISO 문자열로 변환
         endTime: new Date('2024-10-23T12:00:00').toISOString(), // ISO 문자열로 변환
       },
     ],
   },
   {
-    id: 'eng2',
+    id: '2',
     name: 'Engineer B',
     phoneNumber: '010-2222-3333',
     residenceArea: 'Area B',
@@ -89,7 +87,7 @@ export const engineerData = [
     orders: [],
   },
   {
-    id: 'eng3',
+    id: ' 3',
     name: 'Engineer C',
     phoneNumber: '010-3333-4444',
     residenceArea: 'Area C',

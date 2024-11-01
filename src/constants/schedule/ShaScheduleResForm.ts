@@ -15,7 +15,7 @@ export type ShaScheduleResFormValues = {
 
 // 서버로부터 받은 주문 정보와 기사 정보를 담을 타입
 export type OrderInfo = {
-  id: string;
+  id: number;
   name: string;
   phoneNumber: string;
   address: string;
@@ -26,7 +26,7 @@ export type OrderInfo = {
 };
 
 export type EngineerInfo = {
-  id: string;
+  id: number;
   name: string;
   phoneNumber: string;
   Items: string[];
@@ -43,9 +43,11 @@ export const ShaScheduleResFormData = (
   engineerOptions: EngineerInfo[],
   isSubmitAttempted: boolean
 ): ShaTitledFormControlProps[] => {
-  const selectedOrderInfo = orderOptions.find((order) => order.id === formValues.selectedOrder);
+  const selectedOrderInfo = orderOptions.find(
+    (order) => order.id === Number(formValues.selectedOrder)
+  );
   const selectedEngineerInfo = engineerOptions.find(
-    (engineer) => engineer.id === formValues.engineerName
+    (engineer) => engineer.id === Number(formValues.engineerName)
   );
 
   return [
@@ -81,7 +83,7 @@ export const ShaScheduleResFormData = (
               options: orderOptions
                 .filter((order) => !order.engineerId) // 등록된 기사가 없는 주문만 표시
                 .map((order) => ({
-                  value: order.id,
+                  value: order.name,
                   text: order.name,
                 })),
               value: formValues.selectedOrder,
@@ -135,7 +137,7 @@ export const ShaScheduleResFormData = (
                     engineer.availability && !engineerHasOrderAtTime(engineer, selectedOrderInfo)
                 )
                 .map((engineer) => ({
-                  value: engineer.id,
+                  value: engineer.name,
                   text: engineer.name,
                 })),
               value: formValues.engineerName,

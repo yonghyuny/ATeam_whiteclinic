@@ -2,7 +2,7 @@
 
 import ShaTwoButton from '@/components/molecules/Button/ShaTwoButton';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { engineerData, orderData } from '@/constants/scheduleDummy';
+import { engineerData, orderData } from '@/constants/schedule/scheduleDummy';
 import { useEffect, useState } from 'react';
 import ShaTitledFormControl from '@/components/molecules/Form/ShaTitledFormControl';
 import {
@@ -10,7 +10,7 @@ import {
   OrderInfo,
   ShaScheduleResFormData,
   ShaScheduleResFormValues,
-} from '@/constants/ShaScheduleResForm';
+} from '@/constants/schedule/ShaScheduleResForm';
 
 //예약 정보 등록하기 컴포넌트
 
@@ -18,60 +18,66 @@ import {
 
 // 보여질 예약 주문 정보 타입 정의
 type Order = {
-  id: string;
+  id: number;
   details: string;
   startTime: string;
   endTime: string;
-  engineerId: string | null;
+  engineerId: number | null;
 };
 
 // 엔지니어 정보 타입 정의
 type Engineer = {
-  id: string;
+  id: number;
   name: string;
   isHoliday: boolean;
   availability: boolean;
-  orders: { id: string; startTime: string; endTime: string }[];
+  orders: { id: number; startTime: string; endTime: string }[];
 };
 
 //임의로 더미데이터 집어넣어서 테스트함. api로 변경 예정
 const fetchOrderData = async (selectedDate: Date): Promise<OrderInfo[]> => {
-  return orderData
-    .filter((order) => {
-      const orderDate = new Date(order.startTime).toDateString();
-      return new Date(selectedDate).toDateString() === orderDate;
-    })
-    .map((order) => ({
-      id: order.id,
-      name: order.details,
-      phoneNumber: order.phoneNumber,
-      address: order.address,
-      uniqueDetails: order.uniqueDetails,
+  const response = await fetch(`/api/orders?date=${selectedDate.toISOString()}`); // 서버에 날짜 기준으로 데이터 요청
+  const data = await response.json();
+
+  return data
+    .filter((order: any) => !order.engineerId) // 엔지니어가 아직 할당되지 않은 주문만 반환
+    .map((order: any) => ({
+      id: Number(order.id), // id가 문자열이면 Number로 변환
+      details: order.details,
       startTime: order.startTime,
       endTime: order.endTime,
+      engineerId: order.engineerId ? Number(order.engineerId) : null, // engineerId가 있을 경우 변환
     }));
 };
 
-//임의로 더미데이터 집어넣어서 테스트함. api로 변경 예정
+// 서버에서 엔지니어 데이터를 불러오는 함수로 수정
 const fetchEngineerData = async (
   selectedDate: Date,
-  selectedOrder: string
+  selectedOrderId: number
 ): Promise<EngineerInfo[]> => {
-  const order = orderData.find((o) => o.id === selectedOrder);
-  if (!order) return [];
+  const response = await fetch(
+    `/api/engineers?date=${selectedDate.toISOString()}&orderId=${selectedOrderId}`
+  );
+  const data = await response.json();
+  const selectedOrder = data.orders.find((order: Order) => order.id === selectedOrderId);
+  if (!selectedOrder) return [];
 
-  return engineerData
-    .filter((engineer) => {
-      return !engineer.isHoliday && !engineerHasOrderAtTime(engineer, order);
-    })
-    .map((engineer) => ({
-      id: engineer.id,
+  return data
+    .filter(
+      (engineer: any) => !engineer.isHoliday && !engineerHasOrderAtTime(engineer, selectedOrder)
+    )
+    .map((engineer: any) => ({
+      id: Number(engineer.id), // id가 문자열일 경우 변환
       name: engineer.name,
       phoneNumber: engineer.phoneNumber,
       Items: engineer.Items,
       specialNotes: engineer.specialNotes,
       availability: engineer.availability,
-      orders: engineer.orders, // orders 속성 추가
+      orders: engineer.orders.map((order: any) => ({
+        id: Number(order.id), // order id가 문자열일 경우 변환
+        startTime: order.startTime,
+        endTime: order.endTime,
+      })),
     }));
 };
 
@@ -114,7 +120,7 @@ const ShaScheduleRes = () => {
 
   useEffect(() => {
     if (formValues.reservationDateTime && formValues.selectedOrder) {
-      fetchEngineerData(formValues.reservationDateTime, formValues.selectedOrder).then(
+      fetchEngineerData(formValues.reservationDateTime, Number(formValues.selectedOrder)).then(
         (engineers) => {
           setEngineerOptions(engineers);
         }

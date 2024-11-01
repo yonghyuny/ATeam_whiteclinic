@@ -1,10 +1,21 @@
+import ShaButton from '@/components/atom/Button/ShaButton';
 import { TableCell, TableRow } from '@/components/ui/table';
-import { Order } from '@/constants/ScheduleType';
-import { timeSlots } from '@/constants/timeSlots';
+import { Order } from '@/constants/schedule/ScheduleType';
+import { timeSlots } from '@/constants/schedule/timeSlots';
 import React from 'react';
 
 //스케쥴 ROW 테이블 설정
-const ShaGenerateTableRows: React.FC<{ scheduleData: Order[] }> = ({ scheduleData }) => {
+type ShaGenerateTableRowsProps = {
+  scheduleData: Order[];
+  onEditOrder: (order: Order) => void;
+  isEditing: boolean;
+};
+
+const ShaGenerateTableRows = ({
+  scheduleData,
+  onEditOrder,
+  isEditing,
+}: ShaGenerateTableRowsProps) => {
   const slotTimes = timeSlots.map((_, index) => {
     const slotStartTime = new Date(`2024-10-23T${index + 8}:00:00`).getTime();
     const slotEndTime = new Date(`2024-10-23T${index + 9}:00:00`).getTime();
@@ -35,6 +46,11 @@ const ShaGenerateTableRows: React.FC<{ scheduleData: Order[] }> = ({ scheduleDat
                   <TableCell>{order.itemCount}</TableCell>
                   <TableCell>{order.finalPrice}</TableCell>
                   <TableCell>{order.uniqueDetails}</TableCell>
+                  {isEditing && (
+                    <TableCell>
+                      <ShaButton onClick={() => onEditOrder(order)} size="sm" text="수정" />
+                    </TableCell>
+                  )}
                 </React.Fragment>
               ))
             ) : (

@@ -1,15 +1,21 @@
+'use client';
+
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import ShaGenerateTableRows from './ShaGenerateTableRows';
-import { Order } from '@/constants/ScheduleType';
+import { Order } from '@/constants/schedule/ScheduleType';
 
 //스케쥴 보기 column 지정
 type ShaScheduleTimelineProps = {
   scheduleData: Order[]; // Order[]로 타입을 수정
+  onEditOrder: (order: Order) => void;
+  isEditing: boolean;
 };
 
-const ShaScheduleTimeline = ({ scheduleData }: ShaScheduleTimelineProps) => {
-  const tableRows = <ShaGenerateTableRows scheduleData={scheduleData} />;
-
+const ShaScheduleTimeline = ({
+  scheduleData,
+  onEditOrder,
+  isEditing,
+}: ShaScheduleTimelineProps) => {
   return (
     <div className="overflow-x-auto">
       <Table className="min-w-full divide-y divide-gray-200">
@@ -23,9 +29,16 @@ const ShaScheduleTimeline = ({ scheduleData }: ShaScheduleTimelineProps) => {
             <TableHead>세탁대수</TableHead>
             <TableHead>가격</TableHead>
             <TableHead>비고</TableHead>
+            {isEditing && <TableHead>수정</TableHead>}
           </TableRow>
         </TableHeader>
-        <TableBody>{tableRows}</TableBody>
+        <TableBody>
+          <ShaGenerateTableRows
+            scheduleData={scheduleData}
+            onEditOrder={onEditOrder}
+            isEditing={isEditing}
+          />
+        </TableBody>
       </Table>
     </div>
   );
