@@ -39,7 +39,7 @@ const ShaGenerateTableRows = ({
             {slotOrders.length > 0 ? (
               slotOrders.map((order) => (
                 <React.Fragment key={order.orderId}>
-                  <TableCell>{order.name}</TableCell>
+                  <TableCell>{order.customerName}</TableCell>
                   <TableCell>{order.address}</TableCell>
                   <TableCell>{order.phoneNumber}</TableCell>
                   <TableCell>{order.product}</TableCell>

@@ -54,7 +54,7 @@ const ShaScheduleShowTable = () => {
   const handleRowEdit = (order: Order) => {
     const queryString = new URLSearchParams({
       selectTime: order.startTime, // 시작 시간
-      selectCustomerId: order.customerId.toString(), // 고객 ID 왜 오류나냐 미친것
+      selectCustomerId: order.customerId.toString(), // 고객 ID
       selectOrderId: order.orderId.toString(), // 주문 ID
       engineerId: order.engineerId.toString(), // 기사 ID
     }).toString();
