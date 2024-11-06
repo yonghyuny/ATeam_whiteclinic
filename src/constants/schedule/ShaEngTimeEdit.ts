@@ -2,7 +2,7 @@ import { ShaDropdownProps } from '@/components/atom/DropdownBox/ShaDropDown';
 import { ShaDateTimePickerProps } from '@/components/molecules/ADateTimePicker/ShaDateTimePicker';
 import { ShaFormFieldType } from '@/components/molecules/Form/ShaFormField';
 import { ShaTitledFormControlProps } from '@/components/molecules/Form/ShaTitledFormControl';
-import { engineerData } from './scheduleDummy';
+import { dummyEngineers } from './scheduleDummy';
 
 export type ShaEngTimeEditFormValues = {
   reservationDateTime: Date | null;
@@ -43,7 +43,11 @@ export const ShaEngTimeEditFormData = (
           prevprops: {
             label: '기사 선택',
             width: 'medium',
-            options: engineerData.map((id) => ({ key: id.id, value: id.name, text: id.name })),
+            options: dummyEngineers.map((id) => ({
+              key: id.engineerId,
+              value: id.engineerName,
+              text: id.engineerName,
+            })),
             value: formValues.engineerName,
             onChange: (value: string) => handleFieldChange('engineerName', value),
           } as ShaDropdownProps,

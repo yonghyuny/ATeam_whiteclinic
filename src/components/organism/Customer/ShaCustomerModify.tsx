@@ -29,7 +29,7 @@ const customerDummyData: CustomerInfoValues = {
   uniqueDetails: '주차장 지하 1층 이용 가능',
   payment: '카드',
   document: '현금영수증',
-  published: '발행',
+  published: '발행완료',
   isDepositPaid: true,
   depositAmount: 50000,
 };

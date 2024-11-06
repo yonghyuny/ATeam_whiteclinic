@@ -19,7 +19,7 @@ export type OrderInfo = {
   name: string;
   phoneNumber: string;
   address: string;
-  uniqueDetails: string;
+  orderUniqueDetails: string;
   startTime: string;
   endTime: string;
   engineerId?: string | null;
@@ -110,7 +110,7 @@ export const ShaScheduleResFormData = (
               value: selectedOrderInfo
                 ? `${selectedOrderInfo.name}, ${selectedOrderInfo.phoneNumber}, ${
                     selectedOrderInfo.address
-                  }, ${selectedOrderInfo.uniqueDetails}, ${new Date(
+                  }, ${selectedOrderInfo.orderUniqueDetails}, ${new Date(
                     selectedOrderInfo.startTime
                   ).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })} `
                 : '',

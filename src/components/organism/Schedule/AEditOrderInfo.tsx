@@ -1,7 +1,6 @@
-import ShaTwoButton from '@/components/molecules/Button/ShaTwoButton';
 import ShaInfoForm from '@/components/molecules/Form/ShaInfoForm';
 import { Card, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { FormField } from '@/components/ui/form';
+
 import {
   EditOrderCustomerFormData,
   EditOrderCustomerFormValues,
@@ -13,10 +12,10 @@ import {
 import { ShaSalesInfoFormData } from '@/constants/ShaSalesInfoFormData';
 import { CardContent } from '@mui/material';
 import { useEffect, useState } from 'react';
-import ShaSalesInfo, { SalesFormData } from '../Customer/ShaSalesInfo';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { engineerData, orderData } from '@/constants/schedule/scheduleDummy';
+import { SalesFormData } from '../Customer/ShaSalesInfo';
 import { productCategories } from '@/constants/productCategory';
+import { dummyEngineers, dummyOrders } from '@/constants/schedule/scheduleDummy';
+import { SalesType } from '@/constants/schedule/ScheduleType';
 
 type AEditOrderInfoType = {
   selectTime: Date | null;
@@ -48,16 +47,13 @@ const AEditOrderInfo = ({
     address: '',
     uniqueDetails: '',
     document: '',
-    published: '',
+    published: false,
     payment: '',
   });
-  //const [formValues, setFormValues] = useState<ShaEngTimeEditFormValues | null>(null);
-  //const [customerFormValues, setCustomerFormValues] = useState<EditOrderCustomerFormValues | null>(
-  //  null
-  //);
 
   //세척 물품 정보
-  const [salesFormValues, setSalesFormValues] = useState<SalesFormData>({
+  const [salesFormValues, setSalesFormValues] = useState<SalesType>({
+    orderId: selectOrderId || 0,
     selectedCategory: '',
     selectedDropdownValue: '',
     itemCount: 1,
@@ -75,33 +71,40 @@ const AEditOrderInfo = ({
   useEffect(() => {
     // 선택된 엔지니어 정보를 가져옵니다.
     if (engineerId) {
-      const selectedEngineer = engineerData.find((engineer) => Number(engineer.id) === engineerId);
+      const selectedEngineer = dummyEngineers.find(
+        (engineer) => Number(engineer.engineerId) === engineerId
+      );
       if (selectedEngineer) {
         setFormValues((prev) => ({
           ...prev,
-          // 필요한 필드만 포함하도록 수정
-          engineerId: Number(selectedEngineer.id),
-          engineerName: selectedEngineer.name,
+          engineerId: Number(selectedEngineer.engineerId),
+          engineerName: selectedEngineer.engineerName,
           reservationDateTime: selectTime || prev.reservationDateTime,
-          // 필요에 따라 다른 필드도 설정
         }));
       }
     }
 
     // 선택된 주문 정보를 가져옵니다.
     if (selectOrderId) {
-      const selectedOrder = orderData.find((order) => Number(order.id) === selectOrderId);
+      const selectedOrder = dummyOrders.find((order) => Number(order.orderId) === selectOrderId);
       if (selectedOrder) {
         setCustomerFormValues((prev) => ({
           ...prev,
-          customerId: Number(selectedOrder.id),
-          customerName: selectedOrder.name,
+          customerId: Number(selectedOrder.customerId),
+          customerName: selectedOrder.customerName,
           customerTel: selectedOrder.phoneNumber,
           address: selectedOrder.address,
-          uniqueDetails: selectedOrder.uniqueDetails,
+          uniqueDetails: selectedOrder.customerUniqueDetails,
           document: selectedOrder.document,
           published: selectedOrder.published,
-          payment: selectedOrder.payment,
+          payment: String(selectedOrder.payment),
+        }));
+        setSalesFormValues((prev) => ({
+          ...prev,
+          orderId: Number(selectedOrder.orderId),
+          itemCount: selectedOrder.itemCount,
+          finalPrice: selectedOrder.finalPrice,
+          orderUniqueDetails: selectedOrder.orderUniqueDetails || '',
         }));
       }
     }
@@ -116,6 +119,15 @@ const AEditOrderInfo = ({
     setCustomerFormValues((prev) => ({ ...prev, [fieldName]: value }));
   };
 
+  const handleIsChecked = () => {
+    const newChecked = !customerFormValues.published;
+
+    setCustomerFormValues((prev) => ({
+      ...prev,
+      published: newChecked,
+    }));
+  };
+
   const handleCategoryChange = (category: ProductCategoryKey) => {
     setSalesFormValues({
       ...salesFormValues,
@@ -125,6 +137,7 @@ const AEditOrderInfo = ({
     });
   };
 
+  //드랍다운 클릭시 변화
   const handleDropdownChange = (value: string) => {
     setSalesFormValues((prev) => ({
       ...prev,
@@ -232,6 +245,7 @@ const AEditOrderInfo = ({
             ShaTitledFormControlProps={EditOrderCustomerFormData(
               customerFormValues,
               handleCustomerFieldChange,
+              handleIsChecked,
               isSubmitAttempted
             )}
           />

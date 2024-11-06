@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import ShaDateSchedulePicker from '@/components/molecules/ADateTimePicker/ShaDateSchedulePicker';
 import ShaEngineerList from './ShaEngineerList';
 import ShaScheduleTimeline from './ShaScheduleTimeline';
-import { getEngineersByDate, getOrdersByEngineerAndDate } from '@/util/ScheduleShowUtil';
+import {
+  getEngineersByDate,
+  getOrdersByEngineerAndDate,
+} from '@/utils/ScheduleUtils/ScheduleShowUtil';
 import { Engineer, Order } from '@/constants/schedule/ScheduleType';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ShaButton from '@/components/atom/Button/ShaButton';
@@ -10,7 +13,7 @@ import { useRouter } from 'next/navigation';
 
 //리팩토링, 최적화 안함. 추후 작업예정
 const ShaScheduleShowTable = () => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [engineerList, setEngineerList] = useState<Engineer[]>([]);
   const [selectedEngineer, setSelectedEngineer] = useState<number | null>(null);
   const [scheduleData, setScheduleData] = useState<Order[]>([]);
@@ -53,18 +56,28 @@ const ShaScheduleShowTable = () => {
 
   const handleRowEdit = (order: Order) => {
     const queryString = new URLSearchParams({
-      selectTime: order.startTime, // 시작 시간
+      selectTime: order.startTime.toISOString(), // 시작 시간
       selectCustomerId: order.customerId.toString(), // 고객 ID
       selectOrderId: order.orderId.toString(), // 주문 ID
       engineerId: order.engineerId.toString(), // 기사 ID
     }).toString();
 
-    router.push(`/customers/c_modify?${queryString}`);
+    router.push(`/schedule/s_modify?${queryString}`);
   };
+
+  // 날짜 선택 핸들러
+  const handleDateChange = (date: Date | null) => {
+    if (date) {
+      setSelectedDate(date); // 선택된 날짜가 있을 경우 설정
+    } else {
+      setSelectedDate(new Date()); // 선택된 날짜가 없으면 오늘 날짜로 설정
+    }
+  };
+
   return (
     <div className="flex flex-row items-center justify-center min-h-screen py-12 px-4 gap-12">
       <div className="flex flex-col gap-2">
-        <ShaDateSchedulePicker value={selectedDate} onChange={setSelectedDate} />
+        <ShaDateSchedulePicker value={selectedDate} onChange={handleDateChange} />
         <ShaEngineerList
           engineerList={engineerList}
           onClick={(engineerId) => setSelectedEngineer(engineerId)}
@@ -84,6 +97,7 @@ const ShaScheduleShowTable = () => {
               scheduleData={scheduleData}
               onEditOrder={handleRowEdit}
               isEditing={isEditing}
+              selectedDate={selectedDate}
             />
           </CardContent>
         </Card>

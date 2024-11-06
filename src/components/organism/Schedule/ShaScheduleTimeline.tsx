@@ -9,12 +9,14 @@ type ShaScheduleTimelineProps = {
   scheduleData: Order[]; // Order[]로 타입을 수정
   onEditOrder: (order: Order) => void;
   isEditing: boolean;
+  selectedDate: Date;
 };
 
 const ShaScheduleTimeline = ({
   scheduleData,
   onEditOrder,
   isEditing,
+  selectedDate,
 }: ShaScheduleTimelineProps) => {
   return (
     <div className="overflow-x-auto">
@@ -37,6 +39,7 @@ const ShaScheduleTimeline = ({
             scheduleData={scheduleData}
             onEditOrder={onEditOrder}
             isEditing={isEditing}
+            selectedDate={selectedDate}
           />
         </TableBody>
       </Table>

@@ -1,4 +1,4 @@
-import { productCategories } from '../productCategory';
+import { SalesFormData } from '@/components/organism/Customer/ShaSalesInfo';
 
 export type EngineerFormValues = {
   phoneNumber: string;
@@ -22,20 +22,26 @@ export type CustomerInfoValues = {
   customerName: string;
   phoneNumber: string;
   address: string;
-  uniqueDetails: string;
+  customerUniqueDetails: string;
   document: string;
-  published: string;
-  payment: number;
+  published: boolean;
+  payment: string;
 };
 
 // 스케쥴용 Order 타입 정의
 export type Order = CustomerInfoValues & {
   customerId: number;
   orderId: number;
-  startTime: string;
-  endTime: string;
+  startTime: Date;
+  endTime: Date;
   engineerId: number;
   finalPrice: number;
   itemCount: number;
   product: string;
+  specialNotes?: string;
+  orderUniqueDetails?: string;
+};
+
+export type SalesType = SalesFormData & {
+  orderId: number;
 };

@@ -8,6 +8,7 @@ import { Payment } from '../Payment';
 import { ShaInputProps } from '@/components/atom/Input/ShaInput';
 import { ShaTextareaProps } from '@/components/atom/Input/ShaTextArea';
 import { Document } from '../Document';
+import { CheckboxProps } from '@/components/atom/CheckBox/ShaCheckBox';
 
 export type EditOrderCustomerFormValues = {
   customerId: number;
@@ -16,12 +17,13 @@ export type EditOrderCustomerFormValues = {
   address: string;
   uniqueDetails: string;
   document: string;
-  published: string;
+  published: boolean;
   payment: string;
 };
 export const EditOrderCustomerFormData = (
   formValues: EditOrderCustomerFormValues,
   handleFieldChange: (FieldName: keyof EditOrderCustomerFormValues, value: any) => void,
+  handleIsChecked: () => void,
   isSubmitAttempted: boolean
 ): ShaTitledFormControlProps[] => [
   {
@@ -144,13 +146,13 @@ export const EditOrderCustomerFormData = (
           } as ShaDropdownProps,
         },
         {
-          formfieldtype: 'ShaOneCheckbox' as ShaFormFieldType,
+          formfieldtype: 'ShaCheckbox' as ShaFormFieldType,
           prevprops: {
-            checkboxes: publishedCheckboxData,
-            value: formValues.published,
-            onChange: (value: string) => handleFieldChange('published', value),
+            textprops: { text: '발행완료' },
+            isChecked: formValues.published,
+            onChange: () => handleIsChecked(),
             className: 'mt-2',
-          } as ShaOneCheckboxProps,
+          } as CheckboxProps,
         },
       ],
     },

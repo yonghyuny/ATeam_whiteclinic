@@ -25,7 +25,7 @@ export type SalesFormData = {
 // 더미 데이터
 const salesDummyData: SalesFormData = {
   selectedCategory: 'airConditioner',
-  selectedDropdownValue: '스탠드형',
+  selectedDropdownValue: '스탠드',
   itemCount: 2,
   discountAmount: 10000,
   finalPrice: 190000,
