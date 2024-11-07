@@ -12,5 +12,5 @@ export const engineerService = {
 
   updatePaymentStatus: async (engineerId: number, isPaid: boolean) => {
     return api.put(`/engineer-info/${engineerId}/payment-status`, { is_paid: isPaid });
-  }
+  },
 };

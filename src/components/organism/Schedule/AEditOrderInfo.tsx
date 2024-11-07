@@ -16,6 +16,7 @@ import { SalesFormData } from '../Customer/ShaSalesInfo';
 import { productCategories } from '@/constants/productCategory';
 import { dummyEngineers, dummyOrders } from '@/constants/schedule/scheduleDummy';
 import { SalesType } from '@/constants/schedule/ScheduleType';
+import ShaTwoButton from '@/components/molecules/Button/ShaTwoButton';
 
 type AEditOrderInfoType = {
   selectTime: Date | null;
@@ -228,6 +229,18 @@ const AEditOrderInfo = ({
     }));
   };
 
+  //isRegisterButtonDisabled랑 isFormValid 이 조건이 둘다 추족되어야함 + 시간, 기사 설정
+  const handleSubmit = async () => {
+    setIsSubmitAttempted(true);
+    // if(isFormValid()){
+    //   try{
+
+    //   }
+    // }catch(error){
+    //   console.error('스케쥴 수정 실패',error)
+    // }
+  };
+
   return (
     <div className="flex gap-4">
       <Card className="w-[800px] shadow-sm">
@@ -267,6 +280,22 @@ const AEditOrderInfo = ({
             })}
           />
         </CardContent>
+        <CardFooter>
+          {/* <ShaTwoButton
+            leftButton={{
+              text: '취소',
+              onClick: () => window.history.back(),
+              size: 'lg',
+              variant: 'outline',
+            }}
+            rightButton={{
+              text: '수정',
+              onClick: handleSubmit,
+              size: 'lg',
+              disabled: ,
+            }}
+          /> */}
+        </CardFooter>
       </Card>
     </div>
   );

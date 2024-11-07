@@ -22,7 +22,7 @@ export type OrderInfo = {
   orderUniqueDetails: string;
   startTime: string;
   endTime: string;
-  engineerId?: string | null;
+  engineerId?: number | null;
 };
 
 export type EngineerInfo = {
@@ -30,7 +30,7 @@ export type EngineerInfo = {
   name: string;
   phoneNumber: string;
   Items: string[];
-  specialNotes: string;
+  engSpecialNotes: string;
   availability: boolean;
   orders: { startTime: string; endTime: string }[];
 };
@@ -164,7 +164,9 @@ export const ShaScheduleResFormData = (
               value: selectedEngineerInfo
                 ? `${selectedEngineerInfo.name}, ${
                     selectedEngineerInfo.phoneNumber
-                  }, ${selectedEngineerInfo.Items.join(', ')}, ${selectedEngineerInfo.specialNotes}`
+                  }, ${selectedEngineerInfo.Items.join(', ')}, ${
+                    selectedEngineerInfo.engSpecialNotes
+                  }`
                 : '',
               disabled: true,
             } as ShaTextareaProps,
