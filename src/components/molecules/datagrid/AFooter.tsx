@@ -2,30 +2,26 @@
 
 import React from 'react';
 import ShaText from '@/components/atom/Text/ShaText';
-import { AFooterProps } from '@/constants/yh/EngineerTypeData';
+import { FooterProps } from '@/constants/yh/EngineerTypeData';
+import ShaInput from '@/components/atom/Input/ShaInput';
 
-
-
-const AFooter = ({ data, isEditing }: AFooterProps) => {
+const AFooter: React.FC<FooterProps> = ({ data, isEditing }) => {
   return (
-    <div className="p-4 flex flex-col gap-3 bg-[#f5f5f5] rounded-lg shadow-md">
-      <ShaText text="요약 정보" size="large" />
-      <div className="border-b border-gray-200" />
+    <div className="grid grid-cols-4 gap-4">
       {data.map((item, index) => (
-        <div key={index} className="flex justify-between items-center">
-          <ShaText text={`${item.label}:`} size="medium" color="primary" />
-          {isEditing && item.isEditable ? (
-            <input
-              type="number"
-              className="p-2 border rounded-md w-[200px]"
-              value={String(item.value).replace(/[^0-9]/g, '')}
-              onChange={(e) => item.onValueChange?.(e.target.value)}
-            />
-          ) : item.renderValue ? (
-            <div className="flex items-center">{item.renderValue(item.value)}</div>
-          ) : (
-            <ShaText text={item.value} size="medium" />
-          )}
+        <div key={index} className="flex flex-col">
+          <div className="text-gray-600">
+            <ShaText text={item.label} size="medium" />
+          </div>
+          <div className="mt-1">
+            {item.renderValue ? (
+              item.renderValue(item.value)
+            ) : isEditing && item.isEditable ? (
+              <ShaInput value={item.value.toString()} onChange={item.onValueChange} size="medium" />
+            ) : (
+              <ShaText text={item.value.toString()} size="medium" />
+            )}
+          </div>
         </div>
       ))}
     </div>

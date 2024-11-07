@@ -1,36 +1,27 @@
 import { ReactNode, useCallback } from 'react';
 import ShaCheckbox from '@/components/atom/CheckBox/ShaCheckBox';
-import { Engineer, EngineerDailyEarning, FooterItem } from '@/constants/yh/EngineerTypeData';
+import { Engineer, FooterItem } from '@/constants/yh/EngineerTypeData';
 import { engineerService } from './engineerService';
+import { calculateNewDailyEarnings } from './engineerUtils';
 
 export const useEngineerFooter = (
   engineer: Engineer,
   editedEngineer: Engineer | null,
   setEditedEngineer: (engineer: Engineer | null) => void
 ) => {
-  const getTotalWage = (eng: Engineer): number => {
+  const getTotalWage = useCallback((eng: Engineer): number => {
     return eng.daily_earnings.reduce((sum, dp) => sum + dp.daily_amount, 0);
-  };
+  }, []);
 
-  const calculateWageAmount = (eng: Engineer): number => {
-    if (!eng || !eng.commission_rate) return 0; // null 체크 추가
+  const calculateWageAmount = useCallback(
+    (eng: Engineer): number => {
+      if (!eng || !eng.commission_rate) return 0;
 
-    const totalWage = getTotalWage(eng);
-    // commission_rate.commission_rate_id를 직접 사용
-    return Math.round(totalWage * (eng.commission_rate.commission_rate_id / 100));
-  };
-
-  const calculateNewDailyEarnings = (
-    dailyEarnings: EngineerDailyEarning[],
-    newTotalAmount: number,
-    currentTotal: number
-  ): EngineerDailyEarning[] => {
-    const ratio = newTotalAmount / currentTotal;
-    return dailyEarnings.map((dp) => ({
-      ...dp,
-      daily_amount: Math.round(dp.daily_amount * ratio),
-    }));
-  };
+      const totalWage = getTotalWage(eng);
+      return Math.round(totalWage * (eng.commission_rate.commission_rate_id / 100));
+    },
+    [getTotalWage]
+  );
 
   const handleTotalWageChange = useCallback(
     async (value: string) => {
@@ -49,7 +40,7 @@ export const useEngineerFooter = (
         daily_earnings: newDailyEarnings,
       });
     },
-    [editedEngineer, engineer, setEditedEngineer]
+    [editedEngineer, engineer, setEditedEngineer, getTotalWage]
   );
 
   const handlePaymentStatusChange = useCallback(
@@ -99,7 +90,13 @@ export const useEngineerFooter = (
       { label: '주소', value: engineer.location },
       { label: '특이사항', value: engineer.remark || '' },
     ];
-  }, [engineer, handleTotalWageChange, handlePaymentStatusChange]);
+  }, [
+    engineer,
+    handleTotalWageChange,
+    handlePaymentStatusChange,
+    calculateWageAmount,
+    getTotalWage,
+  ]);
 
   return { getFooterData };
 };
