@@ -5,6 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import ShaInfoForm from '../Form/ShaInfoForm';
 import { EngineerFormData, EngineerFormValues } from '@/constants/ShaEngineerForm';
 import ShaTwoButton from '../Button/ShaTwoButton';
+import axios from 'axios';
 
 type RegisterProps = {
   onRegister?: () => void;
@@ -59,11 +60,52 @@ const ShaRegister = ({ onRegister }: RegisterProps) => {
     ];
     return requiredFields.every((field) => formValues[field] !== '');
   };
+  const registerEngineer = async (data: EngineerFormValues) => {
+    try {
+      const requestData = {
+        engineerName: data.name,
+        phoneNumber: data.phoneNumber,
+        location: data.residenceArea,
+        skill: data.Items.join(','),
+        remark: data.specialNotes,
+        commissionRate: data.allowanceRate,
+        paymentDay: data.paymentDay,
+        specialHoliday: data.holidayRegistration.join(','),
+        regularHoliday: data.regularHoliday.join(','),
+      };
 
-  const handleSubmit = () => {
+      const response = await axios.post('/api/registration/engineer', requestData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error('Engineer registration failed:', error);
+      throw error;
+    }
+  };
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async () => {
     setIsSubmitAttempted(true);
     if (isFormValid()) {
-      console.log('등록된 데이터:', formValues);
+      setIsLoading(true);
+      setError(null);
+      try {
+        await registerEngineer(formValues);
+        console.log('기사 정보가 성공적으로 등록되었습니다.');
+        if (onRegister) {
+          onRegister();
+        }
+        resetFormValues();
+      } catch (error) {
+        setError('등록 중 오류가 발생했습니다. 다시 시도해 주세요.');
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -91,11 +133,12 @@ const ShaRegister = ({ onRegister }: RegisterProps) => {
               onClick: resetFormValues,
               size: 'lg',
               variant: 'outline',
+              disabled: isLoading,
             }}
             rightButton={{
-              text: '등록',
+              text: isLoading ? '등록' : '등록',
               onClick: handleSubmit,
-              disabled: !isFormValid(),
+              disabled: !isFormValid() || isLoading,
               size: 'lg',
             }}
           />

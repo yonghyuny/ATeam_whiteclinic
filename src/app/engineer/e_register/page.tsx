@@ -14,7 +14,6 @@ const Page = () => {
 
   return (
     <div style={Style}>
-      {/* <Register /> <= 이거 지워도 되는부분인지????*/}
       <ShaRegister />
     </div>
   );
