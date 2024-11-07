@@ -38,14 +38,23 @@ const fetchOrderData = async (selectedDate: Date): Promise<OrderInfo[]> => {
   const response = await fetch(`/api/orders?date=${selectedDate.toISOString()}`); // 서버에 날짜 기준으로 데이터 요청
   const data = await response.json();
 
+  if (!Array.isArray(data)) {
+    console.error('Expected data to be an array, but received:', data);
+    return [];
+  }
+
   return data
     .filter((order: any) => !order.engineerId) // 엔지니어가 아직 할당되지 않은 주문만 반환
     .map((order: any) => ({
       id: Number(order.id), // id가 문자열이면 Number로 변환
+      name: order.name,
+      phoneNumber: order.phoneNumber,
+      address: order.address,
+      orderUniqueDetails: order.orderUniqueDetails,
       details: order.details,
       startTime: order.startTime,
       endTime: order.endTime,
-      engineerId: order.engineerId ? Number(order.engineerId) : null, // engineerId가 있을 경우 변환
+      engineerId: order.engineerId ? order.engineerId : null, // engineerId가 있을 경우 변환
     }));
 };
 
