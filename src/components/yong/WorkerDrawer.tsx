@@ -14,31 +14,8 @@ import {
   DrawerTrigger,
 } from '@/components/ui/drawer';
 import { AlignJustify } from 'lucide-react';
-import CardFilter, { EngineerWithDetails } from '../organism/yh/CardFilter';
-
-type Engineer = {
-  id: number;
-  engineer_id: number;
-  name: string;
-  phone_number: string;
-  location: string;
-  remark: string;
-  skills: string[];
-  commission_rate: number;
-  payday: string;
-  is_paid: boolean;
-  daily_earnings: {
-    date: string;
-    daily_amount: number;
-  }[];
-};
-
-type WorkerDrawerProps = {
-  engineers: Engineer[];
-  onEngineerSelect: (engineer: Engineer) => void;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-};
+import { EngineerWithDetails, WorkerDrawerProps } from '@/constants/yh/EngineerTypeData';
+import CardFilter from '../organism/yh/CardFilter';
 
 const WorkerDrawer = ({
   engineers = [],

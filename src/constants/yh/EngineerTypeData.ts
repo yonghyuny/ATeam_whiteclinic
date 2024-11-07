@@ -78,3 +78,10 @@ export type FilterProps = {
   onFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onItemClick: (item: [string, EngineerWithDetails]) => void;
 };
+
+export type WorkerDrawerProps = {
+  engineers: Engineer[];
+  onEngineerSelect: (engineer: Engineer) => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+};
