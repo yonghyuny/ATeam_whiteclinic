@@ -1,22 +1,22 @@
 'use client';
 
-import ShaRegister from '@/components/molecules/Engineer/ShaRegister';
-import { Box, Container } from '@mui/material';
 import React from 'react';
+import ShaRegister from '@/components/molecules/Engineer/ShaRegister';
 
-export default function Page() {
+const Page = () => {
+  const Style = {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '100vh',
+    width: '100%',
+  };
+
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        width: '100%',
-      }}
-    >
-      {/* <Register /> */}
-      <ShaRegister></ShaRegister>
-    </Box>
+    <div style={Style}>
+      {/* <Register /> <= 이거 지워도 되는부분인지????*/}
+      <ShaRegister />
+    </div>
   );
-}
+};
+export default Page;
