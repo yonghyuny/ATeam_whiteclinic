@@ -4,24 +4,7 @@ import React from 'react';
 import ShaInput from '@/components/atom/Input/ShaInput';
 import ACard from '@/components/molecules/Card/ACards';
 import { ScrollArea } from '@/components/ui/scroll-area';
-
-export type EngineerWithDetails = {
-  engineer_id: number;
-  name: string;
-  phone_number: string;
-  location: string;
-  remark: string;
-  skills: string[];
-  commission_rate: number;
-  regular_engineer_id?: number;
-};
-
-type FilterProps = {
-  data: [string, EngineerWithDetails][];
-  filter: string;
-  onFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onItemClick: (item: [string, EngineerWithDetails]) => void;
-};
+import { FilterProps } from '@/constants/yh/EngineerTypeData';
 
 const CardFilter = ({ data, filter, onFilterChange, onItemClick }: FilterProps) => {
   const handleInputChange = (value: string) => {

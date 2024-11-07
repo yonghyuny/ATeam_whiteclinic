@@ -60,3 +60,21 @@ export type AFooterProps = {
   data: FooterItem[];
   isEditing: boolean;
 };
+
+export type EngineerWithDetails = {
+  engineer_id: number;
+  name: string;
+  phone_number: string;
+  location: string;
+  remark: string;
+  skills: string[];
+  commission_rate: number;
+  regular_engineer_id?: number;
+};
+
+export type FilterProps = {
+  data: [string, EngineerWithDetails][];
+  filter: string;
+  onFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onItemClick: (item: [string, EngineerWithDetails]) => void;
+};
