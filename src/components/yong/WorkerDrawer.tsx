@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { X } from 'lucide-react';
+import { X, AlignJustify } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Drawer,
@@ -13,9 +13,9 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
-import { AlignJustify } from 'lucide-react';
-import { EngineerWithDetails, WorkerDrawerProps } from '@/constants/yh/EngineerTypeData';
+import { Engineer, WorkerDrawerProps } from '@/constants/yh/EngineerTypeData';
 import CardFilter from '../organism/yh/CardFilter';
+
 
 const WorkerDrawer = ({
   engineers = [],
@@ -28,25 +28,15 @@ const WorkerDrawer = ({
   const filteredEngineers = React.useMemo(() => {
     return engineers
       .map(
-        (engineer, index) =>
-          [
-            `engineer${index}`,
-            {
-              engineer_id: engineer.engineer_id,
-              name: engineer.name,
-              phone_number: engineer.phone_number,
-              location: engineer.location,
-              remark: engineer.remark,
-              skills: engineer.skills,
-              commission_rate: engineer.commission_rate,
-            } as EngineerWithDetails,
-          ] as [string, EngineerWithDetails]
+        (engineer): [string, Engineer] => [
+          `engineer${engineer.engineer_id}`,
+          engineer
+        ]
       )
-      .filter(
-        ([_, engineer]) =>
-          engineer.name.toLowerCase().includes(filter.toLowerCase()) ||
-          engineer.location.toLowerCase().includes(filter.toLowerCase()) ||
-          engineer.phone_number.includes(filter)
+      .filter(([_, engineer]) =>
+        engineer.name.toLowerCase().includes(filter.toLowerCase()) ||
+        engineer.location.toLowerCase().includes(filter.toLowerCase()) ||
+        engineer.phone_number.includes(filter)
       );
   }, [engineers, filter]);
 
@@ -54,14 +44,8 @@ const WorkerDrawer = ({
     setFilter(event.target.value);
   };
 
-  const handleEngineerSelect = (engineerDetails: EngineerWithDetails) => {
-    // EngineerWithDetails를 Engineer로 변환
-    const selectedEngineer = engineers.find(
-      (eng) => eng.engineer_id === engineerDetails.engineer_id
-    );
-    if (selectedEngineer) {
-      onEngineerSelect(selectedEngineer);
-    }
+  const handleEngineerSelect = ([_, engineer]: [string, Engineer]) => {
+    onEngineerSelect(engineer);
     onOpenChange(false);
   };
 
@@ -90,10 +74,10 @@ const WorkerDrawer = ({
             data={filteredEngineers}
             filter={filter}
             onFilterChange={handleFilterChange}
-            onItemClick={([_, engineer]) => handleEngineerSelect(engineer)}
+            onItemClick={handleEngineerSelect}
           />
 
-          <DrawerFooter>{/* 공란으로 둘것 */}</DrawerFooter>
+          <DrawerFooter />
         </div>
       </DrawerContent>
     </Drawer>

@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Engineer } from '@/constants/yh/EngineerTypeData';
-import { CalendarEventType } from '@/components/atom/Calendar/ACalendar';
+import { useState, useEffect, useCallback } from 'react';
+import { Engineer, EngineerCommissionRate } from '@/constants/yh/EngineerTypeData';
 import { engineerService } from './engineerService';
-import { createCalendarEvents, processEngineerData } from './engineerUtils';
+import { CalendarEventType } from '@/components/atom/Calendar/ACalendar';
+import { createCalendarEvents } from './engineerUtils';
+
 
 export const useEngineer = () => {
   const [selectedEngineer, setSelectedEngineer] = useState<Engineer | null>(null);
@@ -17,22 +17,46 @@ export const useEngineer = () => {
     const fetchEngineers = async () => {
       try {
         const response = await engineerService.getAllEngineers();
-        const { engineer, engineerPay, engineerPayDay, EngineerCommissionRates } = response.data;
+        const { engineer, EngineerCommissionRates, engineerPay, engineerPayDay } = response.data;
 
-        const processedEngineers = engineer.map((eng) => 
-          processEngineerData(eng, engineerPay, engineerPayDay, EngineerCommissionRates)
-        );
+        const processedEngineers: Engineer[] = engineer.map((eng) => {
+          const commissionRate = EngineerCommissionRates.find(
+            (rate) => rate.engineerId === eng.id
+          );
+          const payments = engineerPay.filter(
+            (pay) => pay.engineerId === eng.id
+          );
+          const payDay = engineerPayDay.find(
+            (day) => day.engineerId === eng.id
+          );
+
+          return {
+            engineer_id: eng.id,
+            name: eng.name,
+            phone_number: eng.phoneNumber,
+            location: eng.location,
+            remark: eng.remark,
+            commission_rate: {
+              engineer_id: eng.id,
+              commission_rate_id: commissionRate?.rateId || 0
+            },
+            skills: [],
+            dayoffs: [],
+            holidays: [],
+            daily_earnings: payments.map((pay) => ({
+              engineer_dailyearning_id: pay.id,
+              engineer_id: eng.id,
+              date: new Date(pay.date),
+              daily_amount: pay.daily_amount
+            })),
+            weekly_earnings: [],
+            is_paid: payDay?.is_pay || false
+          };
+        });
 
         setEngineers(processedEngineers);
       } catch (error) {
         console.error('기사 정보 조회 실패:', error);
-        if (axios.isAxiosError(error)) {
-          console.error('Error details:', {
-            status: error.response?.status,
-            data: error.response?.data,
-            message: error.message,
-          });
-        }
       }
     };
 
@@ -41,38 +65,35 @@ export const useEngineer = () => {
 
   useEffect(() => {
     if (selectedEngineer) {
-      const newEvents = createCalendarEvents(selectedEngineer);
-      setEvents(newEvents);
+      setEvents(createCalendarEvents(selectedEngineer));
       setEditedEngineer(selectedEngineer);
     }
   }, [selectedEngineer]);
 
-  const handleWorkerSelect = (engineer: Engineer) => {
+  // handler 함수들 선언
+  const handleWorkerSelect = useCallback((engineer: Engineer) => {
     setSelectedEngineer(engineer);
     setOpen(false);
-  };
+  }, []);
 
-  const handleEditToggle = async () => {
-    if (isEditing && editedEngineer) {
+  const handleEditToggle = useCallback(async () => {
+    if (isEditing && editedEngineer && selectedEngineer) {
       try {
-        await engineerService.updateEngineer(editedEngineer.id, {
-          commission_rate: editedEngineer.commission_rate,
-          is_paid: editedEngineer.is_paid,
-          daily_earnings: editedEngineer.daily_earnings,
-        });
+        await engineerService.updateEngineer(editedEngineer.engineer_id, editedEngineer);
         setSelectedEngineer(editedEngineer);
       } catch (error) {
         console.error('기사 정보 수정 실패:', error);
       }
     }
     setIsEditing(!isEditing);
-  };
+  }, [isEditing, editedEngineer, selectedEngineer]);
 
-  const handleEditCancel = () => {
+  const handleEditCancel = useCallback(() => {
     setIsEditing(false);
     setEditedEngineer(selectedEngineer);
-  };
+  }, [selectedEngineer]);
 
+  // return 문에서 선언된 handler 함수들 사용
   return {
     selectedEngineer,
     editedEngineer,

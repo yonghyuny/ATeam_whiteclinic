@@ -6,12 +6,12 @@ import ACard from '@/components/molecules/Card/ACards';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { FilterProps } from '@/constants/yh/EngineerTypeData';
 
+
 const CardFilter = ({ data, filter, onFilterChange, onItemClick }: FilterProps) => {
   const handleInputChange = (value: string) => {
     const simulatedEvent = {
       target: { value },
     } as React.ChangeEvent<HTMLInputElement>;
-
     onFilterChange(simulatedEvent);
   };
 
@@ -27,13 +27,13 @@ const CardFilter = ({ data, filter, onFilterChange, onItemClick }: FilterProps) 
       </div>
       <ScrollArea className="flex-1 min-h-0">
         <div className="flex flex-col space-y-4 px-4">
-          {data.map((entry) => (
+          {data.map(([_, engineer]) => (
             <ACard
-              key={entry[0]}
-              name={entry[1].name}
-              tel={entry[1].phone_number}
-              address={entry[1].location}
-              onClick={() => onItemClick(entry)}
+              key={engineer.engineer_id}
+              name={engineer.name}
+              tel={engineer.phone_number}
+              address={engineer.location}
+              onClick={() => onItemClick([engineer.engineer_id.toString(), engineer])}
             />
           ))}
         </div>
