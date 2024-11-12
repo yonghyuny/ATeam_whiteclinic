@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import CenteredLayout from '@/styles/layout/CenterLayout';
-import ScheduleModifyContent from '@/components/organism/Schedule/ScheduleModifyContent';
+import ScheduleModifyContent from '@/constants/jwType/ScheduleModifyContent';
 
 const Page = () => {
   return (

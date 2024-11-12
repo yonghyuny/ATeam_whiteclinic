@@ -2,7 +2,6 @@ import { ShaDropdownProps } from '@/components/atom/DropdownBox/ShaDropDown';
 import { ShaDateTimePickerProps } from '@/components/molecules/ADateTimePicker/ShaDateTimePicker';
 import { ShaFormFieldType } from '@/components/molecules/Form/ShaFormField';
 import { ShaTitledFormControlProps } from '@/components/molecules/Form/ShaTitledFormControl';
-import { dummyEngineers } from './scheduleDummy';
 
 export type ShaEngTimeEditFormValues = {
   reservationDateTime: Date | null;
@@ -10,9 +9,11 @@ export type ShaEngTimeEditFormValues = {
   engineerName: string;
 };
 
+// `engineerList`를 매개변수로 추가
 export const ShaEngTimeEditFormData = (
   formValues: ShaEngTimeEditFormValues,
-  handleFieldChange: (fieldName: keyof ShaEngTimeEditFormValues, value: any) => void
+  handleFieldChange: (fieldName: keyof ShaEngTimeEditFormValues, value: any) => void,
+  engineerList: { engineerId: number; engineerName: string }[] // 기사 정보를 담은 리스트
 ): ShaTitledFormControlProps[] => [
   {
     titleprops: {
@@ -43,10 +44,10 @@ export const ShaEngTimeEditFormData = (
           prevprops: {
             label: '기사 선택',
             width: 'medium',
-            options: dummyEngineers.map((id) => ({
-              key: id.engineerId,
-              value: id.engineerName,
-              text: id.engineerName,
+            options: engineerList.map((engineer) => ({
+              key: engineer.engineerId,
+              value: engineer.engineerId.toString(), // 혹은 engineer.engineerName
+              text: engineer.engineerName,
             })),
             value: formValues.engineerName,
             onChange: (value: string) => handleFieldChange('engineerName', value),

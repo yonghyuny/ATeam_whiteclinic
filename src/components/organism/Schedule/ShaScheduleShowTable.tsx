@@ -1,22 +1,64 @@
+// src/components/ShaScheduleShowTable.tsx
 import React, { useState, useEffect } from 'react';
 import ShaDateSchedulePicker from '@/components/molecules/ADateTimePicker/ShaDateSchedulePicker';
 import ShaEngineerList from './ShaEngineerList';
-import ShaScheduleTimeline from './ShaScheduleTimeline';
-import {
-  getEngineersByDate,
-  getOrdersByEngineerAndDate,
-} from '@/utils/ScheduleUtils/ScheduleShowUtil';
-import { Engineer, Order } from '@/constants/schedule/ScheduleType';
+import ShaScheduleTimeline from '../../../constants/jwType/ShaScheduleTimeline';
+
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import ShaButton from '@/components/atom/Button/ShaButton';
 import { useRouter } from 'next/navigation';
+import {
+  ScheduleDisplayOrder,
+  SimplifiedOrder,
+  UnifiedEngineer,
+} from '@/constants/jwType/jwtype_edit';
+import { Engineer } from '@/constants/jwType/jwtype';
+import { getEngineersByDate, getOrdersByEngineerAndDate } from '@/ScheduleUtils/ScheduleShowUtil';
 
-//리팩토링, 최적화 안함. 추후 작업예정
+// Engineer -> UnifiedEngineer 변환 함수
+const convertToUnifiedEngineer = (engineers: Engineer[]): UnifiedEngineer[] => {
+  return engineers.map((engineer) => ({
+    engineerId: engineer.engineer_id,
+    engineerName: engineer.name,
+    phoneNumber: engineer.phone_number,
+    residenceArea: engineer.location,
+    Items: [],
+    ItemsSpecialNotes: engineer.remark || '',
+    allowanceRate: '',
+    paymentDay: '',
+    holidayRegistration: engineer.holidays.map((holiday) => holiday.holiday),
+    regularHoliday: engineer.dayoffs.map((dayoff) => dayoff.weekday_id.toString()),
+  }));
+};
+
+// Order -> ScheduleDisplayOrder 변환 함수
+const convertOrderToScheduleDisplayOrder = (order: SimplifiedOrder): ScheduleDisplayOrder => {
+  return {
+    OrderId: order.orderId,
+    EngineerId: order.engineerId,
+    StartTime: order.startTime,
+    EndTime: order.endTime,
+    CustomerName: order.customerName || '알 수 없음',
+    Address: order.address || '알 수 없음',
+    PhoneNumber: order.phoneNumber || '알 수 없음',
+    ProductType: order.product || '기본 상품 유형',
+    ProductCount: order.itemCount || 1,
+    Price: order.finalPrice || 0,
+    Remarks: order.specialNotes || '',
+    CustomerId: order.customerId,
+    Product: order.product || '기본 제품 이름',
+    ItemCount: order.itemCount || 1,
+    FinalPrice: order.finalPrice || 0,
+    CustomerUniqueDetails: order.orderUniqueDetails || '',
+  };
+};
+
 const ShaScheduleShowTable = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [engineerList, setEngineerList] = useState<Engineer[]>([]);
+  const [engineerList, setEngineerList] = useState<UnifiedEngineer[]>([]);
   const [selectedEngineer, setSelectedEngineer] = useState<number | null>(null);
-  const [scheduleData, setScheduleData] = useState<Order[]>([]);
+  const [scheduleData, setScheduleData] = useState<ScheduleDisplayOrder[]>([]);
   const [isEditing, setIsEditing] = useState(false);
 
   const router = useRouter();
@@ -26,7 +68,8 @@ const ShaScheduleShowTable = () => {
     const fetchData = async () => {
       if (selectedDate) {
         const engineers = await getEngineersByDate(selectedDate);
-        setEngineerList(engineers);
+        const unifiedEngineers = convertToUnifiedEngineer(engineers);
+        setEngineerList(unifiedEngineers);
         setSelectedEngineer(null);
         setScheduleData([]);
       }
@@ -39,7 +82,8 @@ const ShaScheduleShowTable = () => {
   useEffect(() => {
     const fetchEngineerData = async () => {
       if (selectedEngineer && selectedDate) {
-        const schedule = await getOrdersByEngineerAndDate(selectedEngineer, selectedDate);
+        // getOrdersByEngineerAndDate의 반환 타입이 ScheduleDisplayOrder[]라면, as SimplifiedOrder[]을 제거합니다.
+        const schedule = await getOrdersByEngineerAndDate(selectedEngineer, selectedDate); // 타입 단언 제거
         setScheduleData(schedule);
       }
     };
@@ -54,24 +98,19 @@ const ShaScheduleShowTable = () => {
     setIsEditing(!isEditing);
   };
 
-  const handleRowEdit = (order: Order) => {
+  const handleRowEdit = (order: ScheduleDisplayOrder) => {
     const queryString = new URLSearchParams({
-      selectTime: order.startTime.toISOString(), // 시작 시간
-      selectCustomerId: order.customerId.toString(), // 고객 ID
-      selectOrderId: order.orderId.toString(), // 주문 ID
-      engineerId: order.engineerId.toString(), // 기사 ID
+      selectTime: order.StartTime.toISOString(),
+      selectCustomerId: order.CustomerId.toString(),
+      selectOrderId: order.OrderId.toString(),
+      engineerId: order.EngineerId.toString(),
     }).toString();
 
     router.push(`/schedule/s_modify?${queryString}`);
   };
 
-  // 날짜 선택 핸들러
   const handleDateChange = (date: Date | null) => {
-    if (date) {
-      setSelectedDate(date); // 선택된 날짜가 있을 경우 설정
-    } else {
-      setSelectedDate(new Date()); // 선택된 날짜가 없으면 오늘 날짜로 설정
-    }
+    setSelectedDate(date || new Date());
   };
 
   return (

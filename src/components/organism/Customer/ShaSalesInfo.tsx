@@ -1,15 +1,20 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { productCategories } from '@/constants/productCategory';
-import ShaInfoForm from '@/components/molecules/Form/ShaInfoForm';
-import { ShaSalesInfoFormData } from '@/constants/ShaSalesInfoFormData';
-import ShaTwoButton from '@/components/molecules/Button/ShaTwoButton';
+import { useState } from 'react';
 
 type ProductCategoryKey = keyof typeof productCategories;
 
+// product_remark 및 필요한 필드를 포함한 SalesFormData 타입 정의
 export type SalesFormData = {
+  order_id: number;
+  product_type_id: number | null;
+  product_detail_id: number | null;
+  count: number;
+  discount_amount: number;
+  total_amount: number;
+  product_remark: string;
+  remark: string;
   selectedCategory: ProductCategoryKey | '';
   selectedDropdownValue: string;
   itemCount: number;
@@ -22,7 +27,16 @@ export type SalesFormData = {
 };
 
 const ShaSalesInfo = () => {
-  const [formValues, setFormValues] = useState<SalesFormData>({
+  // SalesFormData 타입에 따라 초기 상태 정의
+  const [salesForm, setSalesForm] = useState<SalesFormData>({
+    order_id: 0,
+    product_type_id: 0,
+    product_detail_id: 0,
+    count: 1,
+    discount_amount: 0,
+    total_amount: 0,
+    product_remark: '',
+    remark: '',
     selectedCategory: '',
     selectedDropdownValue: '',
     itemCount: 1,
@@ -38,27 +52,21 @@ const ShaSalesInfo = () => {
 
   const calculateFinalPrice = (data: SalesFormData): number => {
     const { discountAmount, isDiscountApplied, isFinalPriceManual, finalPrice } = data;
-
     if (isFinalPriceManual) return finalPrice;
-
-    if (isDiscountApplied) {
-      return Math.max(finalPrice - discountAmount, 0);
-    }
-
-    return finalPrice;
+    return isDiscountApplied ? Math.max(finalPrice - discountAmount, 0) : finalPrice;
   };
 
   const handleCategoryChange = (category: ProductCategoryKey) => {
-    setFormValues({
-      ...formValues,
+    setSalesForm((prev) => ({
+      ...prev,
       selectedCategory: category,
       selectedDropdownValue: '',
       itemCount: 1,
-    });
+    }));
   };
 
   const handleDropdownChange = (value: string) => {
-    setFormValues((prev) => ({
+    setSalesForm((prev) => ({
       ...prev,
       selectedDropdownValue: value,
     }));
@@ -66,14 +74,12 @@ const ShaSalesInfo = () => {
 
   const handleItemCountChange = (value: string) => {
     const newCount = Number(value);
-
-    setFormValues((prev) => {
+    setSalesForm((prev) => {
       const originalUnitPrice = prev.isDiscountApplied
         ? (prev.finalPrice + prev.discountAmount) / prev.itemCount
         : prev.finalPrice / prev.itemCount;
 
       let newTotalPrice = originalUnitPrice * newCount;
-
       if (prev.isDiscountApplied) {
         newTotalPrice = Math.max(newTotalPrice - prev.discountAmount, 0);
       }
@@ -85,8 +91,9 @@ const ShaSalesInfo = () => {
       };
     });
   };
+
   const handleFinalPriceChange = (value: string) => {
-    setFormValues((prev) => ({
+    setSalesForm((prev) => ({
       ...prev,
       finalPrice: Number(value),
       isFinalPriceManual: true,
@@ -94,61 +101,60 @@ const ShaSalesInfo = () => {
   };
 
   const handleDiscountToggle = (checked: boolean) => {
-    setFormValues((prev) => {
+    setSalesForm((prev) => {
       const newState = {
         ...prev,
         isDiscountApplied: checked,
       };
-
-      if (checked) {
-        return {
-          ...newState,
-          finalPrice: Math.max(prev.finalPrice - prev.discountAmount, 0),
-        };
-      }
-
-      return {
-        ...newState,
-        finalPrice: prev.finalPrice + (prev.isDiscountApplied ? prev.discountAmount : 0),
-      };
+      return checked
+        ? { ...newState, finalPrice: Math.max(prev.finalPrice - prev.discountAmount, 0) }
+        : {
+            ...newState,
+            finalPrice: prev.finalPrice + (prev.isDiscountApplied ? prev.discountAmount : 0),
+          };
     });
   };
 
   const handleDiscountChange = (value: string) => {
     const newDiscountAmount = Number(value);
-    setFormValues((prev) => {
-      if (prev.isDiscountApplied) {
-        const originalPrice = prev.finalPrice + prev.discountAmount;
-        return {
-          ...prev,
-          discountAmount: newDiscountAmount,
-          finalPrice: Math.max(originalPrice - newDiscountAmount, 0),
-        };
-      }
-
+    setSalesForm((prev) => {
+      const originalPrice = prev.isDiscountApplied
+        ? prev.finalPrice + prev.discountAmount
+        : prev.finalPrice;
       return {
         ...prev,
         discountAmount: newDiscountAmount,
+        finalPrice: prev.isDiscountApplied
+          ? Math.max(originalPrice - newDiscountAmount, 0)
+          : prev.finalPrice,
       };
     });
   };
 
   const handleUniqueDetailsChange = (value: string) => {
-    setFormValues((prev) => ({
+    setSalesForm((prev) => ({
       ...prev,
       uniqueDetails: value,
     }));
   };
 
   const handleCustomProductChange = (value: string) => {
-    setFormValues((prev) => ({
+    setSalesForm((prev) => ({
       ...prev,
       customProduct: value,
     }));
   };
 
   const resetForm = () => {
-    setFormValues({
+    setSalesForm({
+      order_id: 0,
+      product_type_id: 0,
+      product_detail_id: 0,
+      count: 1,
+      discount_amount: 0,
+      total_amount: 0,
+      product_remark: '',
+      remark: '',
       selectedCategory: '',
       selectedDropdownValue: '',
       itemCount: 1,
@@ -163,65 +169,18 @@ const ShaSalesInfo = () => {
   };
 
   const isRegisterButtonDisabled =
-    !formValues.selectedCategory || !formValues.selectedDropdownValue || formValues.finalPrice <= 0;
+    !salesForm.selectedCategory || !salesForm.selectedDropdownValue || salesForm.finalPrice <= 0;
 
   const handleSubmit = () => {
     setIsSubmitAttempted(true);
     if (!isRegisterButtonDisabled) {
-      console.log('등록된 정보:', {
-        세척품목: formValues.selectedCategory,
-        카테고리: formValues.selectedDropdownValue,
-        세척대수: formValues.itemCount,
-        할인적용여부: formValues.isDiscountApplied,
-        할인금액: formValues.discountAmount,
-        최종금액: formValues.finalPrice,
-        특이사항: formValues.uniqueDetails,
-        에어컨스탠드: formValues.customProduct,
-      });
+      console.log('등록된 정보:', salesForm);
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-12 px-4">
-      <Card className="w-full max-w-5xl shadow-sm">
-        <CardHeader className="border-b">
-          <CardTitle className="text-2xl font-semibold">세척 정보 등록</CardTitle>
-        </CardHeader>
-
-        <CardContent className="pt-6 px-6">
-          <ShaInfoForm
-            ShaTitledFormControlProps={ShaSalesInfoFormData({
-              onCategoryChange: handleCategoryChange,
-              onDropdownChange: handleDropdownChange,
-              onItemCountChange: handleItemCountChange,
-              onDiscountChange: handleDiscountChange,
-              onUniqueDetailsChange: handleUniqueDetailsChange,
-              onCustomProductChange: handleCustomProductChange,
-              onDiscountToggle: handleDiscountToggle,
-              onFinalPriceChange: handleFinalPriceChange,
-              formData: formValues,
-              isSubmitAttempted,
-            })}
-          />
-        </CardContent>
-
-        <CardFooter className="flex justify-center space-x-4 pt-6 border-t bg-muted/50">
-          <ShaTwoButton
-            leftButton={{
-              text: '취소',
-              onClick: resetForm,
-              size: 'lg',
-              variant: 'outline',
-            }}
-            rightButton={{
-              text: '등록',
-              onClick: handleSubmit,
-              size: 'lg',
-              disabled: isRegisterButtonDisabled,
-            }}
-          />
-        </CardFooter>
-      </Card>
+      {/* UI components such as input fields, dropdowns, and buttons to handle form changes */}
     </div>
   );
 };

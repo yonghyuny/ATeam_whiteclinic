@@ -1,9 +1,6 @@
 import { ShaDropdownProps } from '@/components/atom/DropdownBox/ShaDropDown';
-import { ShaOneCheckboxProps } from '@/components/molecules/checkbox/ShaOneCheckBox';
 import { ShaFormFieldType } from '@/components/molecules/Form/ShaFormField';
 import { ShaTitledFormControlProps } from '@/components/molecules/Form/ShaTitledFormControl';
-import { FieldName } from 'react-hook-form';
-import { publishedCheckboxData } from '../yh/CustomerData';
 import { Payment } from '../Payment';
 import { ShaInputProps } from '@/components/atom/Input/ShaInput';
 import { ShaTextareaProps } from '@/components/atom/Input/ShaTextArea';

@@ -2,16 +2,15 @@
 
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import ShaGenerateTableRows from './ShaGenerateTableRows';
-import { Order } from '@/constants/schedule/ScheduleType';
+import { ScheduleDisplayOrder } from '@/constants/jwType/jwtype';
 
 //스케쥴 보기 column 지정
 type ShaScheduleTimelineProps = {
-  scheduleData: Order[]; // Order[]로 타입을 수정
-  onEditOrder: (order: Order) => void;
+  scheduleData: ScheduleDisplayOrder[];
+  onEditOrder: (order: ScheduleDisplayOrder) => void;
   isEditing: boolean;
   selectedDate: Date;
 };
-
 const ShaScheduleTimeline = ({
   scheduleData,
   onEditOrder,
