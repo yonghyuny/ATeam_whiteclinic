@@ -22,7 +22,7 @@ const Home = () => {
   return (
     <>
       {/* <ACalendar></ACalendar> */}
-      <SalesDashboard></SalesDashboard> 
+      <SalesDashboard></SalesDashboard>
     </>
   );
 };

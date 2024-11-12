@@ -6,6 +6,7 @@ import ShaInfoForm from '../Form/ShaInfoForm';
 import { EngineerFormData, EngineerFormValues } from '@/constants/ShaEngineerForm';
 import ShaTwoButton from '../Button/ShaTwoButton';
 import axios from 'axios';
+import { DayNameEnum, RateEnum } from '@/constants/types/LHH/EngineerRegisterType';
 
 type RegisterProps = {
   onRegister?: () => void;
@@ -15,14 +16,14 @@ const ShaRegister = ({ onRegister }: RegisterProps) => {
   const [formValues, setFormValues] = useState<EngineerFormValues>({
     name: '',
     phoneNumber: '',
-    residenceArea: '',
-    Items: [],
-    ItemsSpecialNotes: '',
-    specialNotes: '',
-    allowanceRate: '',
-    paymentDay: '',
-    holidayRegistration: [],
-    regularHoliday: [],
+    location: '', // residenceArea → location
+    skills: [], // Items → skills
+    skillRemark: '', // ItemsSpecialNotes → skillRemark
+    remark: '', // specialNotes → remark
+    commissionRate: '50%' as RateEnum, // allowanceRate → commissionRate
+    paymentDay: '월요일' as DayNameEnum, // paymentDay (타입만 변경)
+    specialHolidays: [], // holidayRegistration → specialHolidays
+    regularHolidays: [], // regularHoliday → regularHolidays
   });
 
   const [isSubmitAttempted, setIsSubmitAttempted] = useState(false);
@@ -31,14 +32,14 @@ const ShaRegister = ({ onRegister }: RegisterProps) => {
     setFormValues({
       name: '',
       phoneNumber: '',
-      residenceArea: '',
-      Items: [],
-      ItemsSpecialNotes: '',
-      specialNotes: '',
-      allowanceRate: '',
-      paymentDay: '',
-      holidayRegistration: [],
-      regularHoliday: [],
+      location: '',
+      skills: [],
+      skillRemark: '',
+      remark: '',
+      commissionRate: '50%' as RateEnum,
+      paymentDay: '월요일' as DayNameEnum,
+      specialHolidays: [],
+      regularHolidays: [],
     });
     setIsSubmitAttempted(false);
   };
@@ -54,24 +55,26 @@ const ShaRegister = ({ onRegister }: RegisterProps) => {
     const requiredFields: (keyof EngineerFormValues)[] = [
       'name',
       'phoneNumber',
-      'residenceArea',
-      'allowanceRate',
+      'location',
+      'commissionRate',
       'paymentDay',
     ];
     return requiredFields.every((field) => formValues[field] !== '');
   };
+
   const registerEngineer = async (data: EngineerFormValues) => {
     try {
       const requestData = {
         engineerName: data.name,
         phoneNumber: data.phoneNumber,
-        location: data.residenceArea,
-        skill: data.Items.join(','),
-        remark: data.specialNotes,
-        commissionRate: data.allowanceRate,
+        location: data.location,
+        skills: data.skills, // 배열을 그대로 전달
+        skillRemark: data.skillRemark,
+        remark: data.remark,
+        commissionRate: data.commissionRate,
         paymentDay: data.paymentDay,
-        specialHoliday: data.holidayRegistration.join(','),
-        regularHoliday: data.regularHoliday.join(','),
+        specialHolidays: data.specialHolidays, // Date[] 타입
+        regularHolidays: data.regularHolidays, // DayNameEnum[] 타입
       };
 
       const response = await axios.post('/api/registration/engineer', requestData, {
@@ -86,6 +89,7 @@ const ShaRegister = ({ onRegister }: RegisterProps) => {
       throw error;
     }
   };
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -136,7 +140,7 @@ const ShaRegister = ({ onRegister }: RegisterProps) => {
               disabled: isLoading,
             }}
             rightButton={{
-              text: isLoading ? '등록' : '등록',
+              text: '등록',
               onClick: handleSubmit,
               disabled: !isFormValid() || isLoading,
               size: 'lg',
